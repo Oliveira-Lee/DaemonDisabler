@@ -38,12 +38,13 @@ while running:
     print(f"Connected to {device.name}\niOS {device.version}\n")
     
     print("1. Disable thermalmonitord")
+    print("2. Recover thermalmonitord")
     print("0. Exit\n")
     page = int(input("Enter a number: "))
     
     if page == 1:
         try:
-            print("Attempting to restore disabled.plist...")
+            print("\nAttempting to restore disabled.plist...")
             restore_files(files=[FileToRestore(
                 contents=b"""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -62,6 +63,39 @@ while running:
 	<key>com.apple.relevanced</key>
 	<true/>
 	<key>com.apple.thermalmonitord</key>
+	<true/>
+</dict>
+</plist>""",                         
+                restore_path="/var/db/com.apple.xpc.launchd/",
+                restore_name="disabled.plist"
+            )], reboot=True, lockdown_client=device.ld)
+            
+            print("disabled.plist restored successfully!")
+        except Exception as e:
+            print("An error occurred while restoring disabled.plist:")
+            print(traceback.format_exc())
+
+        running = False
+
+    elif page == 2:
+        try:
+            print("\nAttempting to restore disabled.plist...")
+            restore_files(files=[FileToRestore(
+                contents=b"""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.magicswitchd.companion</key>
+	<true/>
+	<key>com.apple.security.otpaird</key>
+	<true/>
+	<key>com.apple.dhcp6d</key>
+	<true/>
+	<key>com.apple.bootpd</key>
+	<true/>
+	<key>com.apple.ftp-proxy-embedded</key>
+	<false/>
+	<key>com.apple.relevanced</key>
 	<true/>
 </dict>
 </plist>""",                         
