@@ -11,9 +11,7 @@ args = [
     '--hidden-import=zeroconf._handlers.answers',
     '--add-data=files/:./files',
     '--copy-metadata=pyimg4',
-    '--onedir',
-    '--name=Nugget',
-    '--icon=nugget.ico'
+    '--onedir'
 ]
 
 if platform == "darwin":
