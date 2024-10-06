@@ -3,7 +3,7 @@ from sys import platform
 import PyInstaller.__main__
 
 args = [
-    'main_app.py',
+    'cli_app.py',
     # '--hidden-import=ipsw_parser',
     '--hidden-import=zeroconf',
     '--hidden-import=pyimg4',
