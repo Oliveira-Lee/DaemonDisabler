@@ -17,6 +17,7 @@ python3 cli_app.py
 Note: It may be either `python`/`pip` or `python3`/`pip3` depending on your path.
 
 **Find My should be turned off to use this tool.**
+**iPhone battery will be displayed as an unknown part/unverified in Settings after disabling thermalmonitord.**
 
 ## Credits
 - Modified from [leminlimez](https://github.com/leminlimez)/[Nugget](https://github.com/leminlimez/Nugget)
