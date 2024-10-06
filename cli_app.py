@@ -15,26 +15,8 @@ running = True
 device = None
 
 while running:
-    print("""\n\n\n\n
-                                                                      
-         ,--.                                                         
-       ,--.'|                                                 ___     
-   ,--,:  : |                                               ,--.'|_   
-,`--.'`|  ' :         ,--,                                  |  | :,'  
-|   :  :  | |       ,'_ /|  ,----._,.  ,----._,.            :  : ' :  
-:   |   \\ | :  .--. |  | : /   /  ' / /   /  ' /   ,---.  .;__,'  /   
-|   : '  '; |,'_ /| :  . ||   :     ||   :     |  /     \\ |  |   |    
-'   ' ;.    ;|  ' | |  . .|   | .\\  .|   | .\\  . /    /  |:__,'| :    
-|   | | \\   ||  | ' |  | |.   ; ';  |.   ; ';  |.    ' / |  '  : |__  
-'   : |  ; .':  | : ;  ; |'   .   . |'   .   . |'   ;   /|  |  | '.'| 
-|   | '`--'  '  :  `--'   \\`---`-'| | `---`-'| |'   |  / |  ;  :    ; 
-'   : |      :  ,      .-./.'__/\\_: | .'__/\\_: ||   :    |  |  ,   /  
-;   |.'       `--`----'    |   :    : |   :    : \\   \\  /    ---`-'   
-'---'                       \\   \\  /   \\   \\  /   `----'              
-                             `--`-'     `--`-'                        
-    """)
-    print("CLI v2.2")
-    print("by LeminLimez, modified by @rponeawa")
+    print("thermalmonitordDisabler")
+    print("Modified by rponeawa from LeminLimez's Nugget")
     print("Please back up your device before using!")
 
     while device == None:
@@ -91,7 +73,7 @@ while running:
         except Exception as e:
             print("An error occurred while restoring disabled.plist:")
             print(traceback.format_exc())
-            
+
         running = False
 
     elif page == 0:
