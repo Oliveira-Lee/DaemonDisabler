@@ -10,7 +10,7 @@ Note: It is highly recommended to use a virtual environment:
 ```
 python3 -m venv .env # only needed once
 # macOS/Linux:  source .env/bin/activate
-# Windows:      .env/Scripts/activate.bat
+# Windows:      ".env/Scripts/activate.bat"
 pip3 install -r requirements.txt # only needed once
 python3 cli_app.py
 ```
