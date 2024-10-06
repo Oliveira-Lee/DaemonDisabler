@@ -2,6 +2,10 @@
 A tool used to disable thermalmonitord to prevent throttling and screen dimming when iOS devices overheat.
 
 ## Running the Program
+Download the latest version from releases based on your system, and run thermalmonitordDisabler or thermalmonitordDisabler.exe.
+
+To execute the code, follow these steps:
+
 Requirements:
 - pymobiledevice3
 - Python 3.8 or newer
