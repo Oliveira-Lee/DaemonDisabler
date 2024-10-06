@@ -16,6 +16,8 @@ python3 cli_app.py
 ```
 Note: It may be either `python`/`pip` or `python3`/`pip3` depending on your path.
 
+**Find My should be turned off to use this tool.**
+
 ## Credits
 - Modified from leminlimez/[Nugget](https://github.com/leminlimez/Nugget)
 - [JJTech](https://github.com/JJTech0130) for Sparserestore/[TrollRestore](https://github.com/JJTech0130/TrollRestore)
