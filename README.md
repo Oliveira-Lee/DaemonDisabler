@@ -1,5 +1,5 @@
 # thermalmonitordDisabler
-A tool used to disable thermalmonitord to prevent throttling and screen dimming when the iOS device overheats.
+A tool used to disable thermalmonitord to prevent throttling and screen dimming when iOS devices overheat.
 
 ## Running the Program
 Requirements:
