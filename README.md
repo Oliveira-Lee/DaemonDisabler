@@ -19,6 +19,6 @@ Note: It may be either `python`/`pip` or `python3`/`pip3` depending on your path
 **Find My should be turned off to use this tool.**
 
 ## Credits
-- Modified from leminlimez/[Nugget](https://github.com/leminlimez/Nugget)
+- Modified from [leminlimez](https://github.com/leminlimez)/[Nugget](https://github.com/leminlimez/Nugget)
 - [JJTech](https://github.com/JJTech0130) for Sparserestore/[TrollRestore](https://github.com/JJTech0130/TrollRestore)
 - [pymobiledevice3](https://github.com/doronz88/pymobiledevice3)
