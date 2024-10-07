@@ -33,7 +33,7 @@ class App(QtWidgets.QWidget):
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
                     "Apply changes",
-                    "Switch to Simplified Chinese"
+                    "切换到简体中文"
                 ]
             },
             "zh": {
@@ -53,7 +53,7 @@ class App(QtWidgets.QWidget):
                     "禁用系统更新",
                     "禁用日志",
                     "应用更改",
-                    "切换到英文"
+                    "Switch to English"
                 ]
             }
         }
