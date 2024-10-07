@@ -27,6 +27,7 @@ class App(QtWidgets.QWidget):
                 "applying_changes": "Applying changes...",
                 "success": "Changes applied successfully!",
                 "error": "An error occurred while applying changes to disabled.plist:",
+                "error_connecting": "Error connecting device",
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
                 "menu_options": [
@@ -49,6 +50,7 @@ class App(QtWidgets.QWidget):
                 "applying_changes": "正在应用修改...",
                 "success": "更改已成功应用！",
                 "error": "应用更改时发生错误：",
+                "error_connecting": "连接设备时发生错误",
                 "goodbye": "再见！",
                 "input_prompt": "请输入选项: ",
                 "menu_options": [
@@ -126,7 +128,7 @@ class App(QtWidgets.QWidget):
                     self.disable_controls(False)
                     return
                 except Exception as e:
-                    self.device_info.setText(self.language_pack[self.language]["error"] + str(e))
+                    self.device_info.setText(self.language_pack[self.language]["error_connecting"] + str(e))
                     print(traceback.format_exc())
                     return
 
