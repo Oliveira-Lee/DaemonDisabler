@@ -24,7 +24,7 @@ python3 gui_app.py
 ```
 Note: It may be either `python`/`pip` or `python3`/`pip3` depending on your path.
 
-Run python3 cli_app.py for CLI.
+Run python3 `cli_app.py` for CLI version.
 
 **Find My should be turned off to use this tool.**
 
