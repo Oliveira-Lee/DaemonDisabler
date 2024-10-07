@@ -56,7 +56,7 @@ class App(QtWidgets.QWidget):
                 "menu_options": [
                     "禁用温控",
                     "禁用系统更新",
-                    "禁用日志",
+                    "禁用使用情况日志",
                     "应用更改",
                     "Switch to English",
                     "刷新"
