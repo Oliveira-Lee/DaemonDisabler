@@ -29,12 +29,11 @@ class App(QtWidgets.QWidget):
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
                 "menu_options": [
-                    "1. Disable thermalmonitord",
-                    "2. Disable OTA",
-                    "3. Disable UsageTrackingAgent",
-                    "4. Apply changes",
-                    "5. Switch to Simplified Chinese",
-                    "0. Exit"
+                    "Disable thermalmonitord",
+                    "Disable OTA",
+                    "Disable UsageTrackingAgent",
+                    "Apply changes",
+                    "Switch to Simplified Chinese"
                 ]
             },
             "zh": {
@@ -50,12 +49,11 @@ class App(QtWidgets.QWidget):
                 "goodbye": "再见！",
                 "input_prompt": "请输入选项: ",
                 "menu_options": [
-                    "1. 禁用温控",
-                    "2. 禁用系统更新",
-                    "3. 禁用日志",
-                    "4. 应用更改",
-                    "5. 切换到英文",
-                    "0. 退出"
+                    "禁用温控",
+                    "禁用系统更新",
+                    "禁用日志",
+                    "应用更改",
+                    "切换到英文"
                 ]
             }
         }
@@ -67,6 +65,9 @@ class App(QtWidgets.QWidget):
         self.setWindowTitle(self.language_pack[self.language]["title"])
         
         self.layout = QtWidgets.QVBoxLayout()
+
+        self.modified_by_label = QtWidgets.QLabel(self.language_pack[self.language]["modified_by"])
+        self.layout.addWidget(self.modified_by_label)
 
         self.device_info = QtWidgets.QLabel(self.language_pack[self.language]["backup_warning"])
         self.layout.addWidget(self.device_info)
@@ -80,7 +81,7 @@ class App(QtWidgets.QWidget):
         self.disable_usage_tracking_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][2])
         self.layout.addWidget(self.disable_usage_tracking_checkbox)
 
-        self.apply_button = QtWidgets.QPushButton("Apply Changes")
+        self.apply_button = QtWidgets.QPushButton(self.language_pack[self.language]["menu_options"][3])
         self.apply_button.clicked.connect(self.apply_changes)
         self.layout.addWidget(self.apply_button)
 
@@ -113,7 +114,7 @@ class App(QtWidgets.QWidget):
                     return
 
         if self.device is None:
-            self.device_info.setText("Please connect your device and try again!")
+            self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
 
     def update_device_info(self):
         if self.device:
@@ -171,13 +172,15 @@ class App(QtWidgets.QWidget):
     def switch_language(self):
         self.language = "zh" if self.language == "en" else "en"
         self.setWindowTitle(self.language_pack[self.language]["title"])
+
+        self.modified_by_label.setText(self.language_pack[self.language]["modified_by"])
         self.device_info.setText(self.language_pack[self.language]["backup_warning"])
         
         self.thermalmonitord_checkbox.setText(self.language_pack[self.language]["menu_options"][0])
         self.disable_ota_checkbox.setText(self.language_pack[self.language]["menu_options"][1])
         self.disable_usage_tracking_checkbox.setText(self.language_pack[self.language]["menu_options"][2])
 
-        self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
+        self.apply_button.setText(self.language_pack[self.language]["menu_options"][3])
         self.switch_language_button.setText(self.language_pack[self.language]["menu_options"][4])
         self.update_device_info()
 
