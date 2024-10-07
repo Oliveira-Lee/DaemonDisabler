@@ -24,6 +24,7 @@ class App(QtWidgets.QWidget):
                 "connected": "Connected to",
                 "ios_version": "iOS",
                 "apply_changes": "Applying changes to disabled.plist...",
+                "applying_changes": "Applying changes...",
                 "success": "Changes applied successfully!",
                 "error": "An error occurred while applying changes to disabled.plist:",
                 "goodbye": "Goodbye!",
@@ -44,6 +45,7 @@ class App(QtWidgets.QWidget):
                 "connected": "已连接到",
                 "ios_version": "iOS",
                 "apply_changes": "正在应用更改到 disabled.plist...",
+                "applying_changes": "正在应用修改...",
                 "success": "更改已成功应用！",
                 "error": "应用更改时发生错误：",
                 "goodbye": "再见！",
@@ -154,6 +156,13 @@ class App(QtWidgets.QWidget):
         return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
     def apply_changes(self):
+        self.apply_button.setText(self.language_pack[self.language]["applying_changes"])
+        self.apply_button.setEnabled(False)
+        QtWidgets.QApplication.processEvents()
+
+        QtCore.QTimer.singleShot(100, self._execute_changes)
+
+    def _execute_changes(self):
         try:
             print("\n" + self.language_pack[self.language]["apply_changes"])
             plist_data = self.modify_disabled_plist()
@@ -168,6 +177,9 @@ class App(QtWidgets.QWidget):
         except Exception as e:
             QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
             print(traceback.format_exc())
+        finally:
+            self.apply_button.setText(self.language_pack[self.language]["menu_options"][3])
+            self.apply_button.setEnabled(True)
 
     def switch_language(self):
         self.language = "zh" if self.language == "en" else "en"
