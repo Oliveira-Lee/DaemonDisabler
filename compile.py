@@ -7,7 +7,7 @@ args = [
     '--hidden-import=zeroconf',
     '--hidden-import=zeroconf._utils.ipaddress',
     '--hidden-import=zeroconf._handlers.answers',
-    '--onedir',
+    '--onefile',
     '--name=thermalmonitordDisabler',
     '--windowed'
 ]
