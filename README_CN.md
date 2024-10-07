@@ -1,7 +1,7 @@
 # 温控禁用工具
-用于禁用 thermalmonitord，以防止 iOS 设备过热时的降频和屏幕变暗。
+用于禁用 thermalmonitord，以防止 iOS 设备过热时的降频和屏幕变暗。你也可以使用它来禁用系统更新和UsageTrackingAgent（系统日志）。
 
-适用于 iOS 18.1 beta 4 以下的所有版本，但可能在 A15 及以上设备上无法完全生效。
+适用于 iOS 18.1 beta 4 以下的所有版本，但禁用温控可能在 A15 及以上设备上无法完全生效。
 
 ## 运行程序
 根据您的系统，从 [Releases](https://github.com/rponeawa/thermalmonitordDisabler/releases/latest) 下载最新版，并运行 thermalmonitordDisabler 或 thermalmonitordDisabler.exe。
