@@ -34,7 +34,8 @@ class App(QtWidgets.QWidget):
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
                     "Apply changes",
-                    "切换到简体中文"
+                    "切换到简体中文",
+                    "Refresh"
                 ]
             },
             "zh": {
@@ -55,7 +56,8 @@ class App(QtWidgets.QWidget):
                     "禁用系统更新",
                     "禁用日志",
                     "应用更改",
-                    "Switch to English"
+                    "Switch to English",
+                    "刷新"
                 ]
             }
         }
@@ -87,6 +89,10 @@ class App(QtWidgets.QWidget):
         self.apply_button.clicked.connect(self.apply_changes)
         self.layout.addWidget(self.apply_button)
 
+        self.refresh_button = QtWidgets.QPushButton(self.language_pack[self.language]["menu_options"][5])
+        self.refresh_button.clicked.connect(self.get_device_info)
+        self.layout.addWidget(self.refresh_button)
+
         self.switch_language_button = QtWidgets.QPushButton(self.language_pack[self.language]["menu_options"][4])
         self.switch_language_button.clicked.connect(self.switch_language)
         self.layout.addWidget(self.switch_language_button)
@@ -96,6 +102,13 @@ class App(QtWidgets.QWidget):
 
     def get_device_info(self):
         connected_devices = usbmux.list_devices()
+
+        if not connected_devices:
+            self.device = None
+            self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
+            self.disable_controls(True)
+            return
+        
         for current_device in connected_devices:
             if current_device.is_usb:
                 try:
@@ -110,17 +123,29 @@ class App(QtWidgets.QWidget):
                         ld=ld
                     )
                     self.update_device_info()
+                    self.disable_controls(False)
+                    return
                 except Exception as e:
-                    self.device_info.setText("Error connecting to device.")
+                    self.device_info.setText(self.language_pack[self.language]["error"] + str(e))
                     print(traceback.format_exc())
                     return
 
-        if self.device is None:
-            self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
+        self.device = None
+        self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
+        self.disable_controls(True)
+
+    def disable_controls(self, disable):
+        self.thermalmonitord_checkbox.setEnabled(not disable)
+        self.disable_ota_checkbox.setEnabled(not disable)
+        self.disable_usage_tracking_checkbox.setEnabled(not disable)
+        self.apply_button.setEnabled(not disable)
 
     def update_device_info(self):
         if self.device:
             self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version}")
+        else:
+            self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
+            self.disable_controls(True)
 
     def modify_disabled_plist(self):
         default_disabled_plist = {
@@ -186,7 +211,11 @@ class App(QtWidgets.QWidget):
         self.setWindowTitle(self.language_pack[self.language]["title"])
 
         self.modified_by_label.setText(self.language_pack[self.language]["modified_by"])
-        self.device_info.setText(self.language_pack[self.language]["backup_warning"])
+        
+        if self.device:
+            self.update_device_info()
+        else:
+            self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
         
         self.thermalmonitord_checkbox.setText(self.language_pack[self.language]["menu_options"][0])
         self.disable_ota_checkbox.setText(self.language_pack[self.language]["menu_options"][1])
@@ -194,7 +223,7 @@ class App(QtWidgets.QWidget):
 
         self.apply_button.setText(self.language_pack[self.language]["menu_options"][3])
         self.switch_language_button.setText(self.language_pack[self.language]["menu_options"][4])
-        self.update_device_info()
+        self.refresh_button.setText(self.language_pack[self.language]["menu_options"][5])
 
 if __name__ == "__main__":
     import sys
