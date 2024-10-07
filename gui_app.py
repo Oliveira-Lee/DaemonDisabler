@@ -27,7 +27,7 @@ class App(QtWidgets.QWidget):
                 "applying_changes": "Applying changes...",
                 "success": "Changes applied successfully!",
                 "error": "An error occurred while applying changes to disabled.plist:",
-                "error_connecting": "Error connecting device",
+                "error_connecting": "Error connecting to device",
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
                 "menu_options": [
