@@ -1,4 +1,6 @@
 # thermalmonitordDisabler
+[中文](https://github.com/rponeawa/thermalmonitordDisabler/blob/main/README_CN.md)
+
 A tool used to disable thermalmonitord to prevent throttling and screen dimming when iOS devices overheat.
 
 Works on all versions below iOS 18.1 beta 4, may not work completely on A15+ devices.
