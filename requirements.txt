@@ -1,2 +1,4 @@
 pymobiledevice3
 pyside6
+PyQt5
+pyinstaller
