@@ -18,9 +18,11 @@ python3 -m venv .env # 只需执行一次
 # macOS/Linux:  source .env/bin/activate
 # Windows:      ".env/Scripts/activate.bat"
 pip3 install -r requirements.txt # 只需执行一次
-python3 cli_app.py
+python3 gui_app.py
 ```
 注意：根据您的路径，可能是 `python`/`pip` 或 `python3`/`pip3`。
+
+对于命令行版，运行 `python3 cli_app.py`
 
 **要使用此工具，必须关闭“查找我的 iPhone”。**
 
