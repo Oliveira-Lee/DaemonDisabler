@@ -1,4 +1,5 @@
 from sys import platform
+import shutil
 
 import PyInstaller.__main__
 
@@ -13,3 +14,6 @@ args = [
 ]
 
 PyInstaller.__main__.run(args)
+
+if platform == "darwin":
+    shutil.rmtree('./dist/_internal', ignore_errors=True)
