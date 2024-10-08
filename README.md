@@ -5,6 +5,8 @@ A tool used to disable thermalmonitord to prevent throttling and screen dimming 
 
 Works on all versions below iOS 18.1 beta 4, disabling thermal monitor may not work completely on A15+ devices.
 
+![](/images/overview.png)
+
 ## Running the Program
 Download the latest version from [releases](https://github.com/rponeawa/thermalmonitordDisabler/releases/latest) based on your system, and run thermalmonitordDisabler or thermalmonitordDisabler.exe.
 
