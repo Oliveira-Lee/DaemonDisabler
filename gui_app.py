@@ -1,4 +1,7 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
+import qdarktheme
+import platform
+
 from exploit.restore import restore_files, FileToRestore
 from devicemanagement.constants import Device
 from pymobiledevice3 import usbmux
@@ -67,8 +70,15 @@ class App(QtWidgets.QWidget):
         self.init_ui()
         self.get_device_info()
 
+    def set_font(self):
+        if platform.system() == "Windows":
+            font = QtGui.QFont("Microsoft YaHei")
+            QtWidgets.QApplication.setFont(font)
+
     def init_ui(self):
         self.setWindowTitle(self.language_pack[self.language]["title"])
+
+        self.set_font()
         
         self.layout = QtWidgets.QVBoxLayout()
 
@@ -229,6 +239,10 @@ class App(QtWidgets.QWidget):
 
 if __name__ == "__main__":
     import sys
+
+    qdarktheme.enable_hi_dpi()
     app = QtWidgets.QApplication(sys.argv)
+    qdarktheme.setup_theme()
+
     gui = App()
     sys.exit(app.exec_())
