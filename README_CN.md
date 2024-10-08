@@ -3,6 +3,8 @@
 
 适用于 iOS 18.1 beta 4 以下的所有版本，但禁用温控可能在 A15 及以上设备上无法完全生效。
 
+<img src="/images/overview_cn.png" style="height:300px;">
+
 ## 运行程序
 根据您的系统，从 [Releases](https://github.com/rponeawa/thermalmonitordDisabler/releases/latest) 下载最新版，并运行 thermalmonitordDisabler 或 thermalmonitordDisabler.exe。
 
