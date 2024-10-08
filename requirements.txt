@@ -1,4 +1,5 @@
 pymobiledevice3
 pyside6
 PyQt5
+pyqtdarktheme
 pyinstaller
