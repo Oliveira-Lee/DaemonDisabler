@@ -1,22 +1,26 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtSvg import QSvgWidget
-import qdarktheme
 import platform
-
-import resources_rc
-
-from exploit.restore import restore_files, FileToRestore
-from devicemanagement.constants import Device
-from pymobiledevice3 import usbmux
-from pymobiledevice3.lockdown import create_using_usbmux
 import plistlib
 import traceback
+
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtSvg import QSvgWidget
+from PyQt5.QtCore import QLocale
+import qdarktheme
+from pymobiledevice3 import usbmux
+from pymobiledevice3.lockdown import create_using_usbmux
+
+import resources_rc
+from exploit.restore import restore_files, FileToRestore
+from devicemanagement.constants import Device
 
 class App(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.device = None
-        self.language = "en"
+
+        locale = QLocale.system().name()
+        self.language = "zh" if locale.startswith("zh") else "en"
+
         self.thermalmonitord = False
         self.disable_ota = False
         self.disable_usage_tracking_agent = False
