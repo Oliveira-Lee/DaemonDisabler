@@ -22,7 +22,7 @@ default_disabled_plist = {
 language_pack = {
     "en": {
         "title": "thermalmonitordDisabler",
-        "modified_by": "Modified by rponeawa from LeminLimez's Nugget",
+        "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nFree tool. If you purchased it, please report the seller.",
         "backup_warning": "Please back up your device before using!",
         "connect_prompt": "Please connect your device and try again!",
         "connected": "Connected to",
@@ -43,7 +43,7 @@ language_pack = {
     },
     "zh": {
         "title": "温控禁用工具",
-        "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改",
+        "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\n免费工具，若您是购买而来，请举报卖家",
         "backup_warning": "使用前请备份您的设备！",
         "connect_prompt": "请连接设备并重试！",
         "connected": "已连接到",
