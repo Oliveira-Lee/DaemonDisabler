@@ -1,38 +1,81 @@
-# thermalmonitordDisabler
-[中文](https://github.com/rponeawa/thermalmonitordDisabler/blob/main/README_CN.md)
+# Daemon Disabler
+[中文](https://github.com/ringoju1ce/DaemonDisabler/blob/main/README_CN.md)
 
-A tool used to disable thermalmonitord to prevent throttling and screen dimming when iOS devices overheat. You can also disable OTA and UsageTrackingAgent with this.
+A tool for disabling certain daemons in iOS.
 
-Works on all versions below iOS 18.1 beta 4, disabling thermal monitor may not work completely on A15+ devices.
+Compatible with all versions below iOS 18.1 beta 4.
 
-<img src="/images/overview.png" style="height:300px;">
+<!--img src="/images/overview_cn.png" style="height:300px;"-->
 
-## Running the Program
-Download the latest version from [releases](https://github.com/rponeawa/thermalmonitordDisabler/releases/latest) based on your system, and run thermalmonitordDisabler or thermalmonitordDisabler.exe.
 
-To execute the code, follow these steps:
+## Running from Source
 
-Requirements:
-- pymobiledevice3
-- Python 3.8 or newer
+You need:
+- Python 3.8 or higher (You can run `python3 --version` to check Python version)
 
-Note: It is highly recommended to use a virtual environment:
-```
-python3 -m venv .env # only needed once
-# macOS/Linux:  source .env/bin/activate
-# Windows:      ".env/Scripts/activate.bat"
-pip3 install -r requirements.txt # only needed once
-python3 gui_app.py
-```
 Note: It may be either `python`/`pip` or `python3`/`pip3` depending on your path.
 
-Run `python3 cli_app.py` for CLI version.
+### Clone the Repository
+```
+git clone https://github.com/ringoju1ce/DaemonDisabler.git
+cd DaemonDisabler
+```
 
-**Find My should be turned off to use this tool.**
+### Create venv
+```
+python3 -m venv .venv
+```
 
-**iPhone battery will be displayed as an unknown part/unverified in Settings after disabling thermalmonitord.**
+This will create a virtual environment in  `.venv` directory under the current directory.
+
+### Activate venv (Windows)
+```
+.\.venv\Scripts\Activate.ps1
+```
+
+If you see `(.venv)` appear in front of your prompt, it means you have successfully activated the virtual environment. The virtual environment will deactivate when you close the current terminal or execute `deactivate` command.
+
+If PowerShell prompts that script execution is disabled on this system, you need to run the following command with administrator privileges:
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+```
+
+This will allow unsigned local scripts to run.
+
+### Activate venv (Linux/macOS)
+```
+. .venv/bin/activate
+```
+
+The virtual environment will deactivate when you close the current terminal or execute `deactivate` command.
+
+### Install Dependencies
+```
+pip3 install -r requirements.txt
+```
+
+### Run the Program (Command Line)
+```
+python3 cli_app.py
+```
+
+### Run the Program (GUI)
+```
+python3 gui_app.py
+```
+
+You must disable “Find My iPhone” to use this tool.
+
+## Building
+
+If you want to run the program on a system without Python installed, you can build an executable with following command:
+```
+python3 compile.py
+```
+
+Executables will be located in `./dist` .
 
 ## Credits
-- Modified from [leminlimez](https://github.com/leminlimez)/[Nugget](https://github.com/leminlimez/Nugget)
+- Modified from [rponeawa](https://github.com/rponeawa)/[thermalmonitordDisabler](https://github.com/rponeawa/thermalmonitordDisabler), [leminlimez](https://github.com/leminlimez)/[Nugget](https://github.com/leminlimez/Nugget)
 - [JJTech](https://github.com/JJTech0130) for Sparserestore/[TrollRestore](https://github.com/JJTech0130/TrollRestore)
 - [pymobiledevice3](https://github.com/doronz88/pymobiledevice3)
