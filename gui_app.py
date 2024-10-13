@@ -25,6 +25,7 @@ class App(QtWidgets.QWidget):
         self.disable_ota = False
         self.disable_usage_tracking_agent = False
         self.disable_perfpowerservices = False
+        self.disable_mobileaccessoryupdater = False
 
         self.language_pack = {
             "en": {
@@ -48,13 +49,15 @@ class App(QtWidgets.QWidget):
                     "Disable thermalmonitord",
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
-                    "Disable PerfPowerServices"
+                    "Disable PerfPowerServices",
+                    "Disable MobileAccessoryUpdater(experimental)"
                 ],
                 "menu_options_tips": [
                     "Lock thermal state at Normal\nThis will prevent screen brightness from being reduced due to high temperatures\nRunning apps won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
                     "Disable services related to system updates",
                     "This service intermittently consumes a large amount of CPU\nDisabling it can significantly reduce heat during high loads and improve performance issues",
-                    "This service consistently consumes a small portion of CPU usage\nDisabling it may reduce battery drain during standby"
+                    "This service consistently consumes a small portion of CPU usage\nDisabling it may reduce battery drain during standby",
+                    "Disabling this service may prevent firmware updates for accessories (e.g. Airpods)"
                 ]
             },
             "zh": {
@@ -78,13 +81,15 @@ class App(QtWidgets.QWidget):
                     "禁用 thermalmonitord",
                     "禁用系统更新",
                     "禁用 UsageTrackingAgent",
-                    "禁用 PerfPowerServices"
+                    "禁用 PerfPowerServices",
+                    "禁用 MobileAccessoryUpdater(实验性)"
                 ],
                 "menu_options_tips": [
-                    "锁定热状态为Normal\n这将防止高温导致屏幕亮度降低\nApp不会主动降低处理速度但无法阻止芯片层面的过热降频\n禁用后电池会显示未知配件",
+                    "锁定热状态为Normal\n屏幕亮度不会在温度升高时降低\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
                     "禁用系统更新相关的服务",
                     "此服务间歇性占用大量CPU\n禁用可显著降低高负载时的发热并改善卡顿情况",
-                    "此服务常驻后台并稳定吃掉一小部分CPU使用率\n禁用后可减少待机时的掉电(不确定)"
+                    "此服务常驻后台并稳定吃掉一小部分CPU使用率\n禁用后可减少待机时的掉电(不确定)",
+                    "禁用此服务可能会阻止配件的固件更新(像是Airpods)"
                 ]
             }
         }
@@ -147,6 +152,10 @@ class App(QtWidgets.QWidget):
         self.disable_perfpowerservices_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][3])
         self.disable_perfpowerservices_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
         self.layout.addWidget(self.disable_perfpowerservices_checkbox)
+
+        self.disable_mobileaccessoryupdater_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][4])
+        self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
+        self.layout.addWidget(self.disable_mobileaccessoryupdater_checkbox)
 
         self.apply_button = QtWidgets.QPushButton(self.language_pack[self.language]["apply_changes"])
         self.apply_button.clicked.connect(self.apply_changes)
@@ -257,6 +266,11 @@ class App(QtWidgets.QWidget):
             plist.pop("com.apple.PerfPowerServicesExtended", None)
             #plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
 
+        if self.disable_mobileaccessoryupdater_checkbox.isChecked():
+            plist["com.apple.MobileAccessoryUpdater"] = True
+        else:
+            plist.pop("com.apple.MobileAccessoryUpdater", None)
+
         return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
     def apply_changes(self):
@@ -304,6 +318,8 @@ class App(QtWidgets.QWidget):
         self.disable_usage_tracking_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][2])
         self.disable_perfpowerservices_checkbox.setText(self.language_pack[self.language]["menu_options"][3])
         self.disable_perfpowerservices_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
+        self.disable_mobileaccessoryupdater_checkbox.setText(self.language_pack[self.language]["menu_options"][4])
+        self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
 
         self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
         self.switch_language_button.setText(self.language_pack[self.language]["switch_lang"])
