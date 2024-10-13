@@ -24,11 +24,12 @@ class App(QtWidgets.QWidget):
         self.thermalmonitord = False
         self.disable_ota = False
         self.disable_usage_tracking_agent = False
+        self.disable_perfpowerservices = False
 
         self.language_pack = {
             "en": {
-                "title": "thermalmonitordDisabler",
-                "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nFree tool. If you purchased it, please report the seller.",
+                "title": "Daemon disabler",
+                "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modified based on this.\nFree tool. If you buy this from someone, just report him.",
                 "backup_warning": "Please back up your device before using!",
                 "connect_prompt": "Please connect your device and try again!",
                 "connected": "Connected to",
@@ -40,18 +41,25 @@ class App(QtWidgets.QWidget):
                 "error_connecting": "Error connecting to device",
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
+                "apply_changes": "Apply Changes",
+                "switch_lang": "切换到中文",
+                "refresh": "Refresh",
                 "menu_options": [
                     "Disable thermalmonitord",
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
-                    "Apply changes",
-                    "切换到简体中文",
-                    "Refresh"
+                    "Disable PerfPowerServices"
+                ],
+                "menu_options_tips": [
+                    "Lock thermal state at Normal\nThis will prevent screen brightness from being reduced due to high temperatures\nRunning apps won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
+                    "Disable services related to system updates",
+                    "This service intermittently consumes a large amount of CPU\nDisabling it can significantly reduce heat during high loads and improve performance issues",
+                    "This service consistently consumes a small portion of CPU usage\nDisabling it may reduce battery drain during standby"
                 ]
             },
             "zh": {
-                "title": "温控禁用工具",
-                "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\n免费工具，若您是购买而来，请举报卖家。",
+                "title": "守护程序禁用工具",
+                "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在此基础上进行了再次修改。\n免费工具，若您是购买而来，请举报卖家。",
                 "backup_warning": "使用前请备份您的设备！",
                 "connect_prompt": "请连接设备并重试！",
                 "connected": "已连接到",
@@ -63,13 +71,20 @@ class App(QtWidgets.QWidget):
                 "error_connecting": "连接设备时发生错误",
                 "goodbye": "再见！",
                 "input_prompt": "请输入选项: ",
+                "apply_changes": "应用更改",
+                "switch_lang": "Switch to English",
+                "refresh": "刷新",
                 "menu_options": [
-                    "禁用温控",
+                    "禁用 thermalmonitord",
                     "禁用系统更新",
-                    "禁用使用情况日志",
-                    "应用更改",
-                    "Switch to English",
-                    "刷新"
+                    "禁用 UsageTrackingAgent",
+                    "禁用 PerfPowerServices"
+                ],
+                "menu_options_tips": [
+                    "锁定热状态为Normal\n这将防止高温导致屏幕亮度降低\nApp不会主动降低处理速度但无法阻止芯片层面的过热降频\n禁用后电池会显示未知配件",
+                    "禁用系统更新相关的服务",
+                    "此服务间歇性占用大量CPU\n禁用可显著降低高负载时的发热并改善卡顿情况",
+                    "此服务常驻后台并稳定吃掉一小部分CPU使用率\n禁用后可减少待机时的掉电(不确定)"
                 ]
             }
         }
@@ -86,7 +101,7 @@ class App(QtWidgets.QWidget):
         self.setWindowTitle(self.language_pack[self.language]["title"])
 
         self.set_font()
-        
+
         self.layout = QtWidgets.QVBoxLayout()
 
         self.modified_by_label = QtWidgets.QLabel(self.language_pack[self.language]["modified_by"])
@@ -101,11 +116,13 @@ class App(QtWidgets.QWidget):
         self.github_icon.setFixedSize(24, 24)
         self.github_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.github_icon.mouseReleaseEvent = lambda event: self.open_link("https://github.com/rponeawa/thermalmonitordDisabler")
+        self.github_icon.setToolTip("rponeawa 的仓库地址")
 
         self.bilibili_icon = QSvgWidget(":/brand-bilibili.svg")
         self.bilibili_icon.setFixedSize(24, 24)
         self.bilibili_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.bilibili_icon.mouseReleaseEvent = lambda event: self.open_link("https://space.bilibili.com/332095459")
+        self.bilibili_icon.setToolTip("rponeawa 的B站主页")
 
         self.icon_layout.addWidget(self.github_icon)
         self.icon_layout.addWidget(self.bilibili_icon)
@@ -116,25 +133,32 @@ class App(QtWidgets.QWidget):
         self.layout.addWidget(self.device_info)
 
         self.thermalmonitord_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][0])
+        self.thermalmonitord_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][0])
         self.layout.addWidget(self.thermalmonitord_checkbox)
 
         self.disable_ota_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][1])
+        self.disable_ota_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][1])
         self.layout.addWidget(self.disable_ota_checkbox)
 
         self.disable_usage_tracking_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][2])
+        self.disable_usage_tracking_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][2])
         self.layout.addWidget(self.disable_usage_tracking_checkbox)
 
-        self.apply_button = QtWidgets.QPushButton(self.language_pack[self.language]["menu_options"][3])
+        self.disable_perfpowerservices_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][3])
+        self.disable_perfpowerservices_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
+        self.layout.addWidget(self.disable_perfpowerservices_checkbox)
+
+        self.apply_button = QtWidgets.QPushButton(self.language_pack[self.language]["apply_changes"])
         self.apply_button.clicked.connect(self.apply_changes)
         self.layout.addWidget(self.apply_button)
 
-        self.refresh_button = QtWidgets.QPushButton(self.language_pack[self.language]["menu_options"][5])
-        self.refresh_button.clicked.connect(self.get_device_info)
-        self.layout.addWidget(self.refresh_button)
-
-        self.switch_language_button = QtWidgets.QPushButton(self.language_pack[self.language]["menu_options"][4])
+        self.switch_language_button = QtWidgets.QPushButton(self.language_pack[self.language]["switch_lang"])
         self.switch_language_button.clicked.connect(self.switch_language)
         self.layout.addWidget(self.switch_language_button)
+
+        self.refresh_button = QtWidgets.QPushButton(self.language_pack[self.language]["refresh"])
+        self.refresh_button.clicked.connect(self.get_device_info)
+        self.layout.addWidget(self.refresh_button)
 
         self.setLayout(self.layout)
         self.show()
@@ -153,7 +177,7 @@ class App(QtWidgets.QWidget):
             self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
             self.disable_controls(True)
             return
-        
+
         for current_device in connected_devices:
             if current_device.is_usb:
                 try:
@@ -183,6 +207,7 @@ class App(QtWidgets.QWidget):
         self.thermalmonitord_checkbox.setEnabled(not disable)
         self.disable_ota_checkbox.setEnabled(not disable)
         self.disable_usage_tracking_checkbox.setEnabled(not disable)
+        self.disable_perfpowerservices_checkbox.setEnabled(not disable)
         self.apply_button.setEnabled(not disable)
 
     def update_device_info(self):
@@ -223,6 +248,15 @@ class App(QtWidgets.QWidget):
         else:
             plist.pop("com.apple.UsageTrackingAgent", None)
 
+        if self.disable_perfpowerservices_checkbox.isChecked():
+            #plist["com.apple.PerfPowerServices"] = True
+            plist["com.apple.PerfPowerServicesExtended"] = True
+            #plist["com.apple.PerfPowerServicesSignpostReader"] = True
+        else:
+            #plist.pop("com.apple.PerfPowerServices", None)
+            plist.pop("com.apple.PerfPowerServicesExtended", None)
+            #plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
+
         return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
     def apply_changes(self):
@@ -248,7 +282,7 @@ class App(QtWidgets.QWidget):
             QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
             print(traceback.format_exc())
         finally:
-            self.apply_button.setText(self.language_pack[self.language]["menu_options"][3])
+            self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
             self.apply_button.setEnabled(True)
 
     def switch_language(self):
@@ -256,26 +290,39 @@ class App(QtWidgets.QWidget):
         self.setWindowTitle(self.language_pack[self.language]["title"])
 
         self.modified_by_label.setText(self.language_pack[self.language]["modified_by"])
-        
+
         if self.device:
             self.update_device_info()
         else:
             self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
-        
-        self.thermalmonitord_checkbox.setText(self.language_pack[self.language]["menu_options"][0])
-        self.disable_ota_checkbox.setText(self.language_pack[self.language]["menu_options"][1])
-        self.disable_usage_tracking_checkbox.setText(self.language_pack[self.language]["menu_options"][2])
 
-        self.apply_button.setText(self.language_pack[self.language]["menu_options"][3])
-        self.switch_language_button.setText(self.language_pack[self.language]["menu_options"][4])
-        self.refresh_button.setText(self.language_pack[self.language]["menu_options"][5])
+        self.thermalmonitord_checkbox.setText(self.language_pack[self.language]["menu_options"][0])
+        self.thermalmonitord_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][0])
+        self.disable_ota_checkbox.setText(self.language_pack[self.language]["menu_options"][1])
+        self.disable_ota_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][1])
+        self.disable_usage_tracking_checkbox.setText(self.language_pack[self.language]["menu_options"][2])
+        self.disable_usage_tracking_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][2])
+        self.disable_perfpowerservices_checkbox.setText(self.language_pack[self.language]["menu_options"][3])
+        self.disable_perfpowerservices_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
+
+        self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
+        self.switch_language_button.setText(self.language_pack[self.language]["switch_lang"])
+        self.refresh_button.setText(self.language_pack[self.language]["refresh"])
 
 if __name__ == "__main__":
     import sys
 
     qdarktheme.enable_hi_dpi()
     app = QtWidgets.QApplication(sys.argv)
-    qdarktheme.setup_theme()
+    qdarktheme.setup_theme(
+        additional_qss="""
+        QToolTip {
+            background-color: #2a2a2a;
+            color: white;
+            border: 1px solid white;
+        }
+        """
+    )
 
     gui = App()
     sys.exit(app.exec_())
