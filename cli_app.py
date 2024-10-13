@@ -31,8 +31,10 @@ language_pack = {
             "[{check}] 1. Disable thermalmonitord",
             "[{check}] 2. Disable OTA",
             "[{check}] 3. Disable UsageTrackingAgent",
-            "4. Apply changes",
-            "5. 切换到简体中文",
+            "[{check}] 4. Disable PerfPowerServices",
+            "[{check}] 5. (testing) Disable remotepairingdeviced",
+            "6. Apply changes",
+            "7. 切换到简体中文",
             "0. Exit"
         ],
         "apply_changes": "Applying changes to disabled.plist...",
@@ -49,11 +51,13 @@ language_pack = {
         "connected": "已连接到",
         "ios_version": "iOS",
         "menu_options": [
-            "[{check}] 1. 禁用温控",
+            "[{check}] 1. 禁用 thermalmonitord (热状态监测,禁用后热状态将始终为Normal,同时电池显示未知部件)",
             "[{check}] 2. 禁用系统更新",
-            "[{check}] 3. 禁用日志",
-            "4. 应用更改",
-            "5. Switch to English",
+            "[{check}] 3. 禁用 UsageTrackingAgent (使用状态追踪,禁用后将大幅缓解高负载状态下的卡顿情况)",
+            "[{check}] 4. 禁用 PerfPowerServices (禁用后将减少CPU占用)",
+            "[{check}] 5. (测试)禁用 remotepairingdeviced",
+            "6. 应用更改",
+            "7. Switch to English",
             "0. 退出"
         ],
         "apply_changes": "正在应用更改到 disabled.plist...",
@@ -64,7 +68,7 @@ language_pack = {
     }
 }
 
-def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False):
+def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_perfpowerservices=False, add_remotepairingdeviced=False):
     plist = default_disabled_plist.copy()
 
     if add_thermalmonitord:
@@ -86,10 +90,24 @@ def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tr
     else:
         plist.pop("com.apple.UsageTrackingAgent", None)
 
+    if add_perfpowerservices:
+        plist["com.apple.PerfPowerServices"] = True
+        plist["com.apple.PerfPowerServicesExtended"] = True
+        plist["com.apple.PerfPowerServicesSignpostReader"] = True
+    else:
+        plist.pop("com.apple.PerfPowerServices", None)
+        plist.pop("com.apple.PerfPowerServicesExtended", None)
+        plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
+
+    if add_remotepairingdeviced:
+        plist["com.apple.remotepairingdeviced"] = True
+    else:
+        plist.pop("com.apple.remotepairingdeviced", None)
+
     plist_data = {'plist': {'dict': plist}}
     return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
-def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent):
+def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_remotepairingdeviced):
     menu = language_pack[language]["menu_options"]
     for i, option in enumerate(menu):
         if i == 0:
@@ -98,6 +116,10 @@ def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent):
             check = "✓" if disable_ota else "×"
         elif i == 2:
             check = "✓" if disable_usage_tracking_agent else "×"
+        elif i == 3:
+            check = "✓" if disable_perfpowerservices else "×"
+        elif i == 4:
+            check = "✓" if disable_remotepairingdeviced else "×"
         else:
             check = ""
         print(option.format(check=check))
@@ -130,9 +152,11 @@ while running:
     thermalmonitord = False
     disable_ota = False
     disable_usage_tracking_agent = False
+    disable_perfpowerservices = False
+    disable_remotepairingdeviced = False
 
     while True:
-        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent)
+        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_remotepairingdeviced)
         choice = int(input(language_pack[language]["input_prompt"]))
 
         if choice == 1:
@@ -142,12 +166,18 @@ while running:
         elif choice == 3:
             disable_usage_tracking_agent = not disable_usage_tracking_agent
         elif choice == 4:
+            disable_perfpowerservices = not disable_perfpowerservices
+        elif choice == 5:
+            disable_remotepairingdeviced = not disable_remotepairingdeviced
+        elif choice == 6:
             try:
                 print("\n" + language_pack[language]["apply_changes"])
                 plist_data = modify_disabled_plist(
                     add_thermalmonitord=thermalmonitord,
                     add_ota=disable_ota,
-                    add_usage_tracking_agent=disable_usage_tracking_agent
+                    add_usage_tracking_agent=disable_usage_tracking_agent,
+                    add_perfpowerservices=disable_perfpowerservices,
+                    add_remotepairingdeviced=disable_remotepairingdeviced
                 )
 
                 restore_files(files=[FileToRestore(
@@ -162,7 +192,7 @@ while running:
             running = False
             break
 
-        elif choice == 5:
+        elif choice == 7:
             language = "zh" if language == "en" else "en"
             print()
             print(language_pack[language]["title"])
