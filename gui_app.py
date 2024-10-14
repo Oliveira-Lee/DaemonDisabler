@@ -139,6 +139,15 @@ class App(QtWidgets.QWidget):
         self.icon_layout.addWidget(self.bilibili_icon)
         self.icon_layout.addWidget(self.github_icon_r)
 
+        self.icon_layout.addItem(QtWidgets.QSpacerItem(24, 24, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+
+        self.switch_language_button = QtWidgets.QPushButton()
+        self.switch_language_button.setIcon(QtGui.QIcon(":/language.svg"))
+        self.switch_language_button.setIconSize(QtCore.QSize(24, 24))
+        self.switch_language_button.clicked.connect(self.switch_language)
+        self.switch_language_button.setToolTip(self.language_pack[self.language]["switch_lang"])
+        self.icon_layout.addWidget(self.switch_language_button)
+
         self.layout.addLayout(self.icon_layout)
 
         self.device_info = QtWidgets.QLabel(self.language_pack[self.language]["backup_warning"])
@@ -168,9 +177,6 @@ class App(QtWidgets.QWidget):
         self.apply_button.clicked.connect(self.apply_changes)
         self.layout.addWidget(self.apply_button)
 
-        self.switch_language_button = QtWidgets.QPushButton(self.language_pack[self.language]["switch_lang"])
-        self.switch_language_button.clicked.connect(self.switch_language)
-        self.layout.addWidget(self.switch_language_button)
 
         self.refresh_button = QtWidgets.QPushButton(self.language_pack[self.language]["refresh"])
         self.refresh_button.clicked.connect(self.get_device_info)
@@ -317,6 +323,7 @@ class App(QtWidgets.QWidget):
         else:
             self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
 
+        self.switch_language_button.setToolTip(self.language_pack[self.language]["switch_lang"])
         self.thermalmonitord_checkbox.setText(self.language_pack[self.language]["menu_options"][0])
         self.thermalmonitord_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][0])
         self.disable_ota_checkbox.setText(self.language_pack[self.language]["menu_options"][1])
@@ -329,7 +336,6 @@ class App(QtWidgets.QWidget):
         self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
 
         self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
-        self.switch_language_button.setText(self.language_pack[self.language]["switch_lang"])
         self.refresh_button.setText(self.language_pack[self.language]["refresh"])
 
 if __name__ == "__main__":
