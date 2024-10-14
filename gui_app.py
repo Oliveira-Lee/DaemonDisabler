@@ -265,11 +265,11 @@ class App(QtWidgets.QWidget):
             plist.pop("com.apple.UsageTrackingAgent", None)
 
         if self.disable_perfpowerservices_checkbox.isChecked():
-            #plist["com.apple.PerfPowerServices"] = True
+            plist["com.apple.PerfPowerServices"] = True
             plist["com.apple.PerfPowerServicesExtended"] = True
             #plist["com.apple.PerfPowerServicesSignpostReader"] = True
         else:
-            #plist.pop("com.apple.PerfPowerServices", None)
+            plist.pop("com.apple.PerfPowerServices", None)
             plist.pop("com.apple.PerfPowerServicesExtended", None)
             #plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
 
