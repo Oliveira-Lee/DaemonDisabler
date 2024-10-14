@@ -230,6 +230,7 @@ class App(QtWidgets.QWidget):
         self.disable_ota_checkbox.setEnabled(not disable)
         self.disable_usage_tracking_checkbox.setEnabled(not disable)
         self.disable_perfpowerservices_checkbox.setEnabled(not disable)
+        self.disable_mobileaccessoryupdater_checkbox.setEnabled(not disable)
         self.apply_button.setEnabled(not disable)
 
     def update_device_info(self):
