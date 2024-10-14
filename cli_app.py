@@ -22,7 +22,7 @@ default_disabled_plist = {
 language_pack = {
     "en": {
         "title": "thermalmonitordDisabler",
-        "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nFree tool. If you purchased it, please report the seller.",
+        "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modifiy based on this.\nFree tool. If you purchased it, please report the seller.",
         "backup_warning": "Please back up your device before using!",
         "connect_prompt": "Please connect your device and try again!",
         "connected": "Connected to",
@@ -32,7 +32,7 @@ language_pack = {
             "[{check}] 2. Disable OTA",
             "[{check}] 3. Disable UsageTrackingAgent",
             "[{check}] 4. Disable PerfPowerServices",
-            "[{check}] 5. (testing) Disable remotepairingdeviced",
+            "[{check}] 5. Disable MobileAccessoryUpdater (experimental) ",
             "6. Apply changes",
             "7. 切换到简体中文",
             "0. Exit"
@@ -45,7 +45,7 @@ language_pack = {
     },
     "zh": {
         "title": "温控禁用工具",
-        "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\n免费工具，若您是购买而来，请举报卖家",
+        "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在此基础上进行了再次修改。\n免费工具，若您是购买而来，请举报卖家",
         "backup_warning": "使用前请备份您的设备！",
         "connect_prompt": "请连接设备并重试！",
         "connected": "已连接到",
@@ -55,7 +55,7 @@ language_pack = {
             "[{check}] 2. 禁用系统更新",
             "[{check}] 3. 禁用 UsageTrackingAgent (使用状态追踪,禁用后将大幅缓解高负载状态下的卡顿情况)",
             "[{check}] 4. 禁用 PerfPowerServices (禁用后将减少CPU占用)",
-            "[{check}] 5. (测试)禁用 remotepairingdeviced",
+            "[{check}] 5. 禁用 MobileAccessoryUpdater (测试)",
             "6. 应用更改",
             "7. Switch to English",
             "0. 退出"
@@ -68,7 +68,7 @@ language_pack = {
     }
 }
 
-def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_perfpowerservices=False, add_remotepairingdeviced=False):
+def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_perfpowerservices=False, add_mobileaccessoryupdater=False):
     plist = default_disabled_plist.copy()
 
     if add_thermalmonitord:
@@ -99,15 +99,15 @@ def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tr
         plist.pop("com.apple.PerfPowerServicesExtended", None)
         plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
 
-    if add_remotepairingdeviced:
-        plist["com.apple.remotepairingdeviced"] = True
+    if add_mobileaccessoryupdater:
+        plist["com.apple.MobileAccessoryUpdater"] = True
     else:
-        plist.pop("com.apple.remotepairingdeviced", None)
+        plist.pop("com.apple.MobileAccessoryUpdater", None)
 
     plist_data = {'plist': {'dict': plist}}
     return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
-def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_remotepairingdeviced):
+def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_mobileaccessoryupdater):
     menu = language_pack[language]["menu_options"]
     for i, option in enumerate(menu):
         if i == 0:
@@ -119,7 +119,7 @@ def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disab
         elif i == 3:
             check = "✓" if disable_perfpowerservices else "×"
         elif i == 4:
-            check = "✓" if disable_remotepairingdeviced else "×"
+            check = "✓" if disable_mobileaccessoryupdater else "×"
         else:
             check = ""
         print(option.format(check=check))
@@ -153,10 +153,10 @@ while running:
     disable_ota = False
     disable_usage_tracking_agent = False
     disable_perfpowerservices = False
-    disable_remotepairingdeviced = False
+    disable_mobileaccessoryupdater = False
 
     while True:
-        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_remotepairingdeviced)
+        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_mobileaccessoryupdater)
         choice = int(input(language_pack[language]["input_prompt"]))
 
         if choice == 1:
@@ -168,7 +168,7 @@ while running:
         elif choice == 4:
             disable_perfpowerservices = not disable_perfpowerservices
         elif choice == 5:
-            disable_remotepairingdeviced = not disable_remotepairingdeviced
+            disable_mobileaccessoryupdater = not disable_mobileaccessoryupdater
         elif choice == 6:
             try:
                 print("\n" + language_pack[language]["apply_changes"])
@@ -177,7 +177,7 @@ while running:
                     add_ota=disable_ota,
                     add_usage_tracking_agent=disable_usage_tracking_agent,
                     add_perfpowerservices=disable_perfpowerservices,
-                    add_remotepairingdeviced=disable_remotepairingdeviced
+                    add_mobileaccessoryupdater=disable_mobileaccessoryupdater
                 )
 
                 restore_files(files=[FileToRestore(
