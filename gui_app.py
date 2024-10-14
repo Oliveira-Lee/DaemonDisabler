@@ -30,7 +30,7 @@ class App(QtWidgets.QWidget):
         self.language_pack = {
             "en": {
                 "title": "Daemon disabler",
-                "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modified based on this.\nFree tool. If you buy this from someone, just report him.",
+                "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modify based on this.\nFree tool. If you buy this from someone, just report him.",
                 "backup_warning": "Please back up your device before using!",
                 "connect_prompt": "Please connect your device and try again!",
                 "connected": "Connected to",
@@ -129,8 +129,15 @@ class App(QtWidgets.QWidget):
         self.bilibili_icon.mouseReleaseEvent = lambda event: self.open_link("https://space.bilibili.com/332095459")
         self.bilibili_icon.setToolTip("rponeawa 的B站主页")
 
+        self.github_icon_r = QSvgWidget(":/brand-github.svg")
+        self.github_icon_r.setFixedSize(24, 24)
+        self.github_icon_r.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.github_icon_r.mouseReleaseEvent = lambda event: self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
+        self.github_icon_r.setToolTip("本项目的仓库地址")
+
         self.icon_layout.addWidget(self.github_icon)
         self.icon_layout.addWidget(self.bilibili_icon)
+        self.icon_layout.addWidget(self.github_icon_r)
 
         self.layout.addLayout(self.icon_layout)
 
