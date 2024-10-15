@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>/icon/brand-bilibili.svg</file>
+        <file>/icon/brand-github.svg</file>
+        <file>/icon/language.svg</file>
+    </qresource>
+</RCC>
