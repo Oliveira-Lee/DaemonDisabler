@@ -8,7 +8,11 @@
 ## 源码运行
 
 需要：
-- Python 3.8 或更高版本 (您可以运行 `python3 --version` 来查看您的 Python 版本)
+- Python 3.8-3.11 (您可以运行 `python3 --version` 来查看您的 Python 版本)
+
+在 Linux 上运行还需要：
+- usbmuxd
+
 
 注意：根据您的路径，以下命令可能是 `python`/`pip` 或 `python3`/`pip3`。
 
@@ -61,6 +65,8 @@ python3 cli_app.py
 python3 gui_app.py
 ```
 
+**如果 Linux 运行报错或无响应，首先检查 usbmuxd 服务是否运行。**
+
 **要使用此工具，必须关闭“查找我的 iPhone”。**
 
 ## 构建程序
@@ -72,6 +78,11 @@ python3 compile.py
 ```
 
 构建的可执行档位于`./dist`
+
+要构建资源文件，执行下面的命令
+```
+pyrcc5 resources.qrc -o resources_rc.py
+```
 
 
 
