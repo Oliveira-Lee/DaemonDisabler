@@ -21,7 +21,7 @@ default_disabled_plist = {
 
 language_pack = {
     "en": {
-        "title": "thermalmonitordDisabler",
+        "title": "Daemon disabler",
         "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modifiy based on this.\nFree tool. If you purchased it, please report the seller.",
         "backup_warning": "Please back up your device before using!",
         "connect_prompt": "Please connect your device and try again!",
@@ -31,7 +31,7 @@ language_pack = {
             "[{check}] 1. Disable thermalmonitord",
             "[{check}] 2. Disable OTA",
             "[{check}] 3. Disable UsageTrackingAgent",
-            "[{check}] 4. Disable PerfPowerServices",
+            "[{check}] 4. Disable PerfPowerServices(Placeholder)",
             "[{check}] 5. Disable MobileAccessoryUpdater (experimental) ",
             "6. Apply changes",
             "7. 切换到简体中文",
@@ -44,7 +44,7 @@ language_pack = {
         "input_prompt": "Enter a number: "
     },
     "zh": {
-        "title": "温控禁用工具",
+        "title": "守护程序禁用工具",
         "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在此基础上进行了再次修改。\n免费工具，若您是购买而来，请举报卖家",
         "backup_warning": "使用前请备份您的设备！",
         "connect_prompt": "请连接设备并重试！",
@@ -54,7 +54,7 @@ language_pack = {
             "[{check}] 1. 禁用 thermalmonitord (热状态监测,禁用后热状态将始终为Normal,同时电池显示未知部件)",
             "[{check}] 2. 禁用系统更新",
             "[{check}] 3. 禁用 UsageTrackingAgent (使用状态追踪,禁用后将大幅缓解高负载状态下的卡顿情况)",
-            "[{check}] 4. 禁用 PerfPowerServices (禁用后将减少CPU占用)",
+            "[{check}] 4. 禁用 PerfPowerServices (占位)",
             "[{check}] 5. 禁用 MobileAccessoryUpdater (测试)",
             "6. 应用更改",
             "7. Switch to English",
@@ -91,13 +91,15 @@ def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tr
         plist.pop("com.apple.UsageTrackingAgent", None)
 
     if add_perfpowerservices:
-        plist["com.apple.PerfPowerServices"] = True
-        plist["com.apple.PerfPowerServicesExtended"] = True
-        plist["com.apple.PerfPowerServicesSignpostReader"] = True
+        pass
+        #plist["com.apple.PerfPowerServices"] = True
+        #plist["com.apple.PerfPowerServicesExtended"] = True
+        #plist["com.apple.PerfPowerServicesSignpostReader"] = True
     else:
-        plist.pop("com.apple.PerfPowerServices", None)
-        plist.pop("com.apple.PerfPowerServicesExtended", None)
-        plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
+        pass
+        #plist.pop("com.apple.PerfPowerServices", None)
+        #plist.pop("com.apple.PerfPowerServicesExtended", None)
+        #plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
 
     if add_mobileaccessoryupdater:
         plist["com.apple.MobileAccessoryUpdater"] = True
