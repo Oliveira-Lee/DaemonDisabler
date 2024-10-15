@@ -56,7 +56,7 @@ class App(QtWidgets.QWidget):
                     "Lock thermal state at Normal\nThis will prevent screen brightness from being reduced due to high temperatures\nRunning apps won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
                     "Disable services related to system updates",
                     "This service intermittently consumes a large amount of CPU\nDisabling it can significantly reduce heat during high loads and improve performance issues",
-                    "This service consistently consumes a small portion of CPU usage\nDisabling it may reduce battery drain during standby",
+                    "No obvious effect, temporarily disabled",
                     "Disabling this service may prevent firmware updates for accessories (e.g. Airpods)"
                 ]
             },
@@ -88,7 +88,7 @@ class App(QtWidgets.QWidget):
                     "锁定热状态为Normal\n屏幕亮度不会在温度升高时降低\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
                     "禁用系统更新相关的服务",
                     "此服务间歇性占用大量CPU\n禁用可显著降低高负载时的发热并改善卡顿情况",
-                    "此服务常驻后台并稳定吃掉一小部分CPU使用率\n禁用后可减少待机时的掉电(不确定)",
+                    "效果不明显 暂时停用",
                     "禁用此服务可能会阻止配件的固件更新(像是Airpods)"
                 ]
             }
@@ -229,7 +229,7 @@ class App(QtWidgets.QWidget):
         self.thermalmonitord_checkbox.setEnabled(not disable)
         self.disable_ota_checkbox.setEnabled(not disable)
         self.disable_usage_tracking_checkbox.setEnabled(not disable)
-        self.disable_perfpowerservices_checkbox.setEnabled(not disable)
+        self.disable_perfpowerservices_checkbox.setEnabled(False)
         self.disable_mobileaccessoryupdater_checkbox.setEnabled(not disable)
         self.apply_button.setEnabled(not disable)
 
