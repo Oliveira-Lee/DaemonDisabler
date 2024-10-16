@@ -31,7 +31,7 @@ language_pack = {
             "[{check}] 1. Disable thermalmonitord",
             "[{check}] 2. Disable OTA",
             "[{check}] 3. Disable UsageTrackingAgent",
-            "[{check}] 4. Disable PerfPowerServices(Placeholder)",
+            "[{check}] 4. Disable spotlightknowledged (experimental)",
             "[{check}] 5. Disable MobileAccessoryUpdater (experimental) ",
             "6. Apply changes",
             "7. 切换到简体中文",
@@ -54,7 +54,7 @@ language_pack = {
             "[{check}] 1. 禁用 thermalmonitord (热状态监测,禁用后热状态将始终为Normal,同时电池显示未知部件)",
             "[{check}] 2. 禁用系统更新",
             "[{check}] 3. 禁用 UsageTrackingAgent (使用状态追踪,禁用后将大幅缓解高负载状态下的卡顿情况)",
-            "[{check}] 4. 禁用 PerfPowerServices (占位)",
+            "[{check}] 4. 禁用 spotlightknowledged (测试)",
             "[{check}] 5. 禁用 MobileAccessoryUpdater (测试)",
             "6. 应用更改",
             "7. Switch to English",
@@ -68,7 +68,7 @@ language_pack = {
     }
 }
 
-def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_perfpowerservices=False, add_mobileaccessoryupdater=False):
+def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_spotlightknowledged=False, add_mobileaccessoryupdater=False):
     plist = default_disabled_plist.copy()
 
     if add_thermalmonitord:
@@ -90,16 +90,10 @@ def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tr
     else:
         plist.pop("com.apple.UsageTrackingAgent", None)
 
-    if add_perfpowerservices:
-        pass
-        #plist["com.apple.PerfPowerServices"] = True
-        #plist["com.apple.PerfPowerServicesExtended"] = True
-        #plist["com.apple.PerfPowerServicesSignpostReader"] = True
+    if add_spotlightknowledged:
+        plist["com.apple.spotlightknowledged"] = True
     else:
-        pass
-        #plist.pop("com.apple.PerfPowerServices", None)
-        #plist.pop("com.apple.PerfPowerServicesExtended", None)
-        #plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
+        plist.pop("com.apple.spotlightknowledged", None)
 
     if add_mobileaccessoryupdater:
         plist["com.apple.MobileAccessoryUpdater"] = True
@@ -109,7 +103,7 @@ def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tr
     plist_data = {'plist': {'dict': plist}}
     return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
-def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_mobileaccessoryupdater):
+def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_spotlightknowledged, disable_mobileaccessoryupdater):
     menu = language_pack[language]["menu_options"]
     for i, option in enumerate(menu):
         if i == 0:
@@ -119,7 +113,7 @@ def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disab
         elif i == 2:
             check = "✓" if disable_usage_tracking_agent else "×"
         elif i == 3:
-            check = "✓" if disable_perfpowerservices else "×"
+            check = "✓" if disable_spotlightknowledged else "×"
         elif i == 4:
             check = "✓" if disable_mobileaccessoryupdater else "×"
         else:
@@ -154,11 +148,11 @@ while running:
     thermalmonitord = False
     disable_ota = False
     disable_usage_tracking_agent = False
-    disable_perfpowerservices = False
+    disable_spotlightknowledged = False
     disable_mobileaccessoryupdater = False
 
     while True:
-        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_perfpowerservices, disable_mobileaccessoryupdater)
+        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_spotlightknowledged, disable_mobileaccessoryupdater)
         choice = int(input(language_pack[language]["input_prompt"]))
 
         if choice == 1:
@@ -168,7 +162,7 @@ while running:
         elif choice == 3:
             disable_usage_tracking_agent = not disable_usage_tracking_agent
         elif choice == 4:
-            disable_perfpowerservices = not disable_perfpowerservices
+            disable_spotlightknowledged = not disable_spotlightknowledged
         elif choice == 5:
             disable_mobileaccessoryupdater = not disable_mobileaccessoryupdater
         elif choice == 6:
@@ -178,7 +172,7 @@ while running:
                     add_thermalmonitord=thermalmonitord,
                     add_ota=disable_ota,
                     add_usage_tracking_agent=disable_usage_tracking_agent,
-                    add_perfpowerservices=disable_perfpowerservices,
+                    add_spotlightknowledged=disable_spotlightknowledged,
                     add_mobileaccessoryupdater=disable_mobileaccessoryupdater
                 )
 
