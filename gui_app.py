@@ -24,7 +24,7 @@ class App(QtWidgets.QWidget):
         self.thermalmonitord = False
         self.disable_ota = False
         self.disable_usage_tracking_agent = False
-        self.disable_perfpowerservices = False
+        self.disable_spotlightknowledged = False
         self.disable_mobileaccessoryupdater = False
 
         self.language_pack = {
@@ -49,14 +49,14 @@ class App(QtWidgets.QWidget):
                     "Disable thermalmonitord",
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
-                    "Disable PerfPowerServices",
+                    "Disable spotlightknowledged",
                     "Disable MobileAccessoryUpdater(experimental)"
                 ],
                 "menu_options_tips": [
                     "Lock thermal state at Normal\nThis will prevent screen brightness from being reduced due to high temperatures\nRunning apps won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
                     "Disable services related to system updates",
-                    "This service intermittently consumes a large amount of CPU\nDisabling it can significantly reduce heat during high loads and improve performance issues",
-                    "No obvious effect, temporarily disabled",
+                    "This service intermittently consumes a large amount of CPU\nDisabling it can significantly reduce heat during high loads and improve performance",
+                    "In early versions of iOS 17, there is a bug that causes this service to use significant CPU resources\nYou don't need to disable this service when running iOS 17.5 or above\n*Disabling this service may prevent Spotlight from indexing new content",
                     "Disabling this service may prevent firmware updates for accessories (e.g. Airpods)"
                 ]
             },
@@ -81,14 +81,14 @@ class App(QtWidgets.QWidget):
                     "禁用 thermalmonitord",
                     "禁用系统更新",
                     "禁用 UsageTrackingAgent",
-                    "禁用 PerfPowerServices",
+                    "禁用 spotlightknowledged",
                     "禁用 MobileAccessoryUpdater(实验性)"
                 ],
                 "menu_options_tips": [
                     "锁定热状态为Normal\n屏幕亮度不会在温度升高时降低\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
                     "禁用系统更新相关的服务",
                     "此服务间歇性占用大量CPU\n禁用可显著降低高负载时的发热并改善卡顿情况",
-                    "效果不明显 暂时停用",
+                    "在iOS 17早期版本中, 有bug会导致此服务占用大量CPU\n如果设备分析数据中存在多条 spotlightknowledged.cpu_resource 开头的报告 说明你可能受到此问题的影响\n该问题在iOS 17.5左右被修复 如果你的 iOS 版本更高则无需禁用此项\n*禁用此服务可能会阻止 spotlight 索引新内容但不影响搜索功能",
                     "禁用此服务可能会阻止配件的固件更新(像是Airpods)"
                 ]
             }
@@ -165,9 +165,9 @@ class App(QtWidgets.QWidget):
         self.disable_usage_tracking_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][2])
         self.layout.addWidget(self.disable_usage_tracking_checkbox)
 
-        self.disable_perfpowerservices_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][3])
-        self.disable_perfpowerservices_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
-        self.layout.addWidget(self.disable_perfpowerservices_checkbox)
+        self.disable_spotlightknowledged_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][3])
+        self.disable_spotlightknowledged_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
+        self.layout.addWidget(self.disable_spotlightknowledged_checkbox)
 
         self.disable_mobileaccessoryupdater_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][4])
         self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
@@ -229,7 +229,7 @@ class App(QtWidgets.QWidget):
         self.thermalmonitord_checkbox.setEnabled(not disable)
         self.disable_ota_checkbox.setEnabled(not disable)
         self.disable_usage_tracking_checkbox.setEnabled(not disable)
-        self.disable_perfpowerservices_checkbox.setEnabled(False)
+        self.disable_spotlightknowledged_checkbox.setEnabled(not disable)
         self.disable_mobileaccessoryupdater_checkbox.setEnabled(not disable)
         self.apply_button.setEnabled(not disable)
 
@@ -271,14 +271,10 @@ class App(QtWidgets.QWidget):
         else:
             plist.pop("com.apple.UsageTrackingAgent", None)
 
-        if self.disable_perfpowerservices_checkbox.isChecked():
-            plist["com.apple.PerfPowerServices"] = True
-            plist["com.apple.PerfPowerServicesExtended"] = True
-            #plist["com.apple.PerfPowerServicesSignpostReader"] = True
+        if self.disable_spotlightknowledged_checkbox.isChecked():
+            plist["com.apple.spotlightknowledged"] = True
         else:
-            plist.pop("com.apple.PerfPowerServices", None)
-            plist.pop("com.apple.PerfPowerServicesExtended", None)
-            #plist.pop("com.apple.PerfPowerServicesSignpostReader", None)
+            plist.pop("com.apple.spotlightknowledged", None)
 
         if self.disable_mobileaccessoryupdater_checkbox.isChecked():
             plist["com.apple.MobileAccessoryUpdater"] = True
@@ -331,8 +327,8 @@ class App(QtWidgets.QWidget):
         self.disable_ota_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][1])
         self.disable_usage_tracking_checkbox.setText(self.language_pack[self.language]["menu_options"][2])
         self.disable_usage_tracking_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][2])
-        self.disable_perfpowerservices_checkbox.setText(self.language_pack[self.language]["menu_options"][3])
-        self.disable_perfpowerservices_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
+        self.disable_spotlightknowledged_checkbox.setText(self.language_pack[self.language]["menu_options"][3])
+        self.disable_spotlightknowledged_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
         self.disable_mobileaccessoryupdater_checkbox.setText(self.language_pack[self.language]["menu_options"][4])
         self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
 
