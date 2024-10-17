@@ -5,9 +5,6 @@ A tool for disabling certain daemons in iOS.
 
 Compatible with all versions below iOS 18.1 beta 4.
 
-<!--img src="/images/overview_cn.png" style="height:300px;"-->
-
-
 ## Running from Source
 
 Require:

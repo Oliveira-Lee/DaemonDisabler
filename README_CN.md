@@ -3,8 +3,6 @@
 
 适用于 iOS 18.1 beta 4 以下的所有版本。
 
-<!--img src="/images/overview_cn.png" style="height:300px;"-->
-
 ## 源码运行
 
 需要：
