@@ -277,8 +277,10 @@ class App(QtWidgets.QWidget):
             plist.pop("com.apple.spotlightknowledged", None)
 
         if self.disable_mobileaccessoryupdater_checkbox.isChecked():
+            plist["com.apple.accessoryupdater"] = True
             plist["com.apple.MobileAccessoryUpdater"] = True
         else:
+            plist.pop("com.apple.accessoryupdater", None)
             plist.pop("com.apple.MobileAccessoryUpdater", None)
 
         return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
