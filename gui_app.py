@@ -37,8 +37,9 @@ class App(QtWidgets.QWidget):
                 "ios_version": "iOS",
                 "apply_changes": "Applying changes to disabled.plist...",
                 "applying_changes": "Applying changes...",
-                "success": "Changes applied successfully!",
-                "error": "An error occurred while applying changes to disabled.plist:",
+                "success": "Changes applied successfully!\nRemember to turn Find My back on!",
+                "error": "An error occurred while applying changes:",
+                "error_find_my": "\nFind My must be disabled in order to use this tool.",
                 "error_connecting": "Error connecting to device",
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
@@ -69,8 +70,9 @@ class App(QtWidgets.QWidget):
                 "ios_version": "iOS",
                 "apply_changes": "正在应用更改到 disabled.plist...",
                 "applying_changes": "正在应用修改...",
-                "success": "更改已成功应用！",
+                "success": "更改已成功应用！\n记得重新启用查找！",
                 "error": "应用更改时发生错误：",
+                "error_find_my": "设备未关闭查找",
                 "error_connecting": "连接设备时发生错误",
                 "goodbye": "再见！",
                 "input_prompt": "请输入选项: ",
@@ -305,7 +307,11 @@ class App(QtWidgets.QWidget):
 
             QtWidgets.QMessageBox.information(self, "Success", self.language_pack[self.language]["success"])
         except Exception as e:
-            QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
+            error_message = str(e)
+            if 'MBErrorDomain/211' in error_message:
+                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["error_find_my"])
+            else:
+                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
             print(traceback.format_exc())
         finally:
             self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
