@@ -35,6 +35,8 @@ class App(QtWidgets.QWidget):
                 "connect_prompt": "Please connect your device and try again!",
                 "connected": "Connected to",
                 "ios_version": "iOS",
+                "supported": "Supported",
+                "not_supported": "Not Supported",
                 "apply_changes": "Applying changes to disabled.plist...",
                 "applying_changes": "Applying changes...",
                 "success": "Changes applied successfully!\nRemember to turn Find My back on!",
@@ -68,6 +70,8 @@ class App(QtWidgets.QWidget):
                 "connect_prompt": "请连接设备并重试！",
                 "connected": "已连接到",
                 "ios_version": "iOS",
+                "supported": "支持的版本",
+                "not_supported": "不支持的版本",
                 "apply_changes": "正在应用更改到 disabled.plist...",
                 "applying_changes": "正在应用修改...",
                 "success": "更改已成功应用！\n记得重新启用查找！",
@@ -211,12 +215,16 @@ class App(QtWidgets.QWidget):
                         uuid=current_device.serial,
                         name=vals['DeviceName'],
                         version=vals['ProductVersion'],
+                        build=vals['BuildVersion'],
                         model=vals['ProductType'],
                         locale=ld.locale,
                         ld=ld
                     )
                     self.update_device_info()
-                    self.disable_controls(False)
+                    if self.device.supported():
+                        self.disable_controls(False)
+                    else:
+                        self.disable_controls(True)
                     return
                 except Exception as e:
                     self.device_info.setText(self.language_pack[self.language]["error_connecting"] + str(e))
@@ -237,7 +245,10 @@ class App(QtWidgets.QWidget):
 
     def update_device_info(self):
         if self.device:
-            self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version}")
+            if self.device.supported():
+                self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version} Build {self.device.build} ({self.language_pack[self.language]['supported']})")
+            else:
+                self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version} Build {self.device.build} ({self.language_pack[self.language]['not_supported']})")
         else:
             self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
             self.disable_controls(True)
