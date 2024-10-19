@@ -21,8 +21,8 @@ default_disabled_plist = {
 
 language_pack = {
     "en": {
-        "title": "Daemon disabler",
-        "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modifiy based on this.\nFree tool. If you purchased it, please report the seller.",
+        "title": "Daemon Disabler",
+        "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modifiy based on rponeawa's work.",
         "backup_warning": "Please back up your device before using!",
         "connect_prompt": "Please connect your device and try again!",
         "connected": "Connected to",
@@ -45,7 +45,7 @@ language_pack = {
     },
     "zh": {
         "title": "守护程序禁用工具",
-        "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在此基础上进行了再次修改。\n免费工具，若您是购买而来，请举报卖家",
+        "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在 rponeawa 的基础上进行了再次修改。",
         "backup_warning": "使用前请备份您的设备！",
         "connect_prompt": "请连接设备并重试！",
         "connected": "已连接到",
