@@ -27,6 +27,8 @@ language_pack = {
         "connect_prompt": "Please connect your device and try again!",
         "connected": "Connected to",
         "ios_version": "iOS",
+        "supported": "Supported",
+        "not_supported": "Not Supported",
         "menu_options": [
             "[{check}] 1. Disable thermalmonitord",
             "[{check}] 2. Disable OTA",
@@ -50,6 +52,8 @@ language_pack = {
         "connect_prompt": "请连接设备并重试！",
         "connected": "已连接到",
         "ios_version": "iOS",
+        "supported": "支持的版本",
+        "not_supported": "不支持的版本",
         "menu_options": [
             "[{check}] 1. 禁用 thermalmonitord (热状态监测,禁用后热状态将始终为Normal,同时电池显示未知部件)",
             "[{check}] 2. 禁用系统更新",
@@ -135,7 +139,7 @@ while running:
                     ld = create_using_usbmux(serial=current_device.serial)
                     vals = ld.all_values
                     device = Device(uuid=current_device.serial, name=vals['DeviceName'],
-                                    version=vals['ProductVersion'], model=vals['ProductType'],
+                                    version=vals['ProductVersion'],build=vals['BuildVersion'], model=vals['ProductType'],
                                     locale=ld.locale, ld=ld)
                 except Exception as e:
                     print(traceback.format_exc())
@@ -144,8 +148,10 @@ while running:
         if device is None:
             print(language_pack[language]["connect_prompt"])
             input("Press Enter to continue...")
-
-    print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version}\n")
+    if device.supported():
+        print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['supported']})\n")
+    else:
+        print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['not_supported']})\n")
 
     thermalmonitord = False
     disable_ota = False
@@ -196,7 +202,10 @@ while running:
             print(language_pack[language]["title"])
             print(language_pack[language]["modified_by"])
             print(language_pack[language]["backup_warning"] + "\n")
-            print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version}")
+            if device.supported():
+                print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['supported']})\n")
+            else:
+                print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['not_supported']})\n")
         elif choice == 0:
             print()
             print(language_pack[language]["goodbye"])
