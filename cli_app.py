@@ -96,8 +96,10 @@ def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tr
         plist.pop("com.apple.spotlightknowledged", None)
 
     if add_mobileaccessoryupdater:
+        plist["com.apple.accessoryupdater"] = True
         plist["com.apple.MobileAccessoryUpdater"] = True
     else:
+        plist.pop("com.apple.accessoryupdater", None)
         plist.pop("com.apple.MobileAccessoryUpdater", None)
 
     plist_data = {'plist': {'dict': plist}}
