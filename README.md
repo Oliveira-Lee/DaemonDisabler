@@ -3,7 +3,7 @@
 
 A tool for disabling certain daemons in iOS.
 
-Compatible with all versions below iOS 18.1 beta 4.
+Compatible with iOS 14 - iOS 18.1 beta 4.
 
 ## Running from Source
 
