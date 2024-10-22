@@ -15,6 +15,8 @@ class Device:
         parsed_ver: Version = Version(self.version)
         if (parsed_ver < Version("14.0")) or (parsed_ver > Version("18.1")):
             return False
+        if (parsed_ver > Version("17.7")) and (parsed_ver < Version("18.0")):
+            return False
         if (parsed_ver == Version("18.1")
             and self.build != "22B5007p" and self.build == "22B5023e"
             and self.build == "22B5034e" and self.build == "22B5045g"):
