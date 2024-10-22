@@ -13,7 +13,7 @@ class Device:
 
     def supported(self) -> bool:
         parsed_ver: Version = Version(self.version)
-        if (parsed_ver < Version("14.0")) or (parsed_ver > Version("18.1")):
+        if (parsed_ver < Version("15.7")) or (parsed_ver > Version("18.1")):
             return False
         if (parsed_ver > Version("17.7")) and (parsed_ver < Version("18.0")):
             return False
