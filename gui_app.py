@@ -323,6 +323,9 @@ class App(QtWidgets.QWidget):
             error_message = str(e)
             if 'MBErrorDomain/211' in error_message:
                 QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["error_find_my"])
+            # https://gist.github.com/leminlimez/c602c067349140fe979410ef69d39c28#the-patch
+            elif 'MBErrorDomain/205' in error_message:
+                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["not_supported"])
             else:
                 QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
             print(traceback.format_exc())
