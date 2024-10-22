@@ -251,6 +251,7 @@ class App(QtWidgets.QWidget):
         if self.device:
             if self.device.supported():
                 self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version} Build {self.device.build} ({self.language_pack[self.language]['supported']})")
+                self.device_info.setToolTip("")
             else:
                 self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version} Build {self.device.build} ({self.language_pack[self.language]['not_supported']})")
                 self.device_info.setToolTip(self.language_pack[self.language]["supported_versions_tip"])
