@@ -1,13 +1,13 @@
 import platform
 import plistlib
 import traceback
+import os
+import subprocess
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtCore import QLocale
 import qdarktheme
-from pymobiledevice3 import usbmux
-from pymobiledevice3.lockdown import create_using_usbmux
 
 import resources_rc
 from exploit.restore import restore_files, FileToRestore
@@ -198,6 +198,8 @@ class App(QtWidgets.QWidget):
             print(f"Error opening link {url}: {str(e)}")
 
     def get_device_info(self):
+        from pymobiledevice3 import usbmux
+        from pymobiledevice3.lockdown import create_using_usbmux
         connected_devices = usbmux.list_devices()
 
         if not connected_devices:
@@ -354,6 +356,61 @@ class App(QtWidgets.QWidget):
         self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
         self.refresh_button.setText(self.language_pack[self.language]["refresh"])
 
+class CheckService():
+    def __init__(self, system_name, service_name):
+        if platform.system() == system_name:
+            self.service_ctl(service_name)
+
+    def get_init_system(self):
+        try:
+            init_process = os.readlink('/sbin/init')
+            if 'systemd' in init_process:
+                return 'systemd'
+            elif 'openrc' in init_process:
+                return 'openrc'
+            return 'unknown'
+        except Exception as e:
+            self.show_error(f"Error determining init system: {e}")
+
+    def service_ctl(self, service_name):
+        init_system = self.get_init_system()
+        command = self.get_command(init_system, service_name, 'status')
+
+        if command is None:
+            return
+
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+        if 'could not be found' in result.stderr or 'does not exist' in result.stderr:
+            self.show_error(f"Check if '{service_name}' is installed.")
+        elif 'inactive' in result.stdout or 'stopped' in result.stderr:
+            self.start_service(service_name)
+
+    def start_service(self, service_name):
+        init_system = self.get_init_system()
+        command = self.get_command(init_system, service_name, 'start')
+
+        if command is None:
+            return
+
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        if result.returncode != 0:
+            self.show_error(f"Failed to start '{service_name}'.")
+
+    def get_command(self, init_system, service_name, action):
+        if init_system == 'systemd':
+            return ['systemctl', action, service_name]
+        elif init_system == 'openrc':
+            return ['rc-service', service_name, action]
+        else:
+            self.show_error(f"Unsupported init system: {init_system}")
+            return None
+
+    def show_error(self, message):
+        QtWidgets.QMessageBox.critical(None, "Error", message)
+        sys.exit()
+
 if __name__ == "__main__":
     import sys
 
@@ -369,5 +426,6 @@ if __name__ == "__main__":
         """
     )
 
+    check = CheckService('Linux', 'usbmuxd')
     gui = App()
     sys.exit(app.exec_())
