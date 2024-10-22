@@ -37,6 +37,7 @@ class App(QtWidgets.QWidget):
                 "ios_version": "iOS",
                 "supported": "Supported",
                 "not_supported": "Not Supported",
+                "supported_versions_tip": "Current version is not supported.\nWorks on:\niOS 14-iOS 17.7\niOS 18.0-iOS 18.1 beta 4",
                 "apply_changes": "Applying changes to disabled.plist...",
                 "applying_changes": "Applying changes...",
                 "success": "Changes applied successfully!\nRemember to turn Find My back on!",
@@ -72,6 +73,7 @@ class App(QtWidgets.QWidget):
                 "ios_version": "iOS",
                 "supported": "支持的版本",
                 "not_supported": "不支持的版本",
+                "supported_versions_tip": "当前版本不在支持范围内\n支持的版本:\niOS 14-iOS 17.7\niOS 18.0-iOS 18.1 beta 4",
                 "apply_changes": "正在应用更改到 disabled.plist...",
                 "applying_changes": "正在应用修改...",
                 "success": "更改已成功应用！\n记得重新启用查找！",
@@ -251,6 +253,7 @@ class App(QtWidgets.QWidget):
                 self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version} Build {self.device.build} ({self.language_pack[self.language]['supported']})")
             else:
                 self.device_info.setText(f"{self.language_pack[self.language]['connected']} {self.device.name}\n{self.language_pack[self.language]['ios_version']} {self.device.version} Build {self.device.build} ({self.language_pack[self.language]['not_supported']})")
+                self.device_info.setToolTip(self.language_pack[self.language]["supported_versions_tip"])
         else:
             self.device_info.setText(self.language_pack[self.language]["connect_prompt"])
             self.disable_controls(True)
