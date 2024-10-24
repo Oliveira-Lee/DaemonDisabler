@@ -3,9 +3,75 @@
 
 A tool for disabling certain daemons in iOS.
 
+**Use this software at your own risk. Make a backup before using it.**
+
 Compatible with iOS 15.7-iOS 17.7；iOS 18.0-iOS 18.1 beta 4
 
-## Running from Source
+**Important**: Any modifications made to iOS using this software will persist even after upgrading iOS. However, upgrading to an unsupported version will prevent you from undoing these modifications through this software. Additionally, these modifications will be included in your device backups and restored to any device, as well as transferred when you use this device to set up a new device.
+
+In short: **You must undo all modifications before upgrading iOS, make a backup, or transferring data to another device。**
+
+On supported iOS version, undoing the modifications using this software is simple: just connect your device, ensure all checkboxes are unchecked, and click `Apply Changes`.
+
+However, even if you upgrade to an unsupported version and forget to undo these modifications beforehand, **you still have a chance to reverse these modifications**.
+
+You can look for software capable of editing iOS backups, select a backup, and edit `DatabaseDomain/com.apple.xpc.launchd/disabled.plist`. Then, locate and delete the following key-value pairs: (Note that some of these pairs may not be present in your file, depending on which daemons were disabled using this software. The order of key-value pairs in your file may also differ, which is acceptable. Do not touch anything else besides the key-value pairs listed below.)
+```
+com.apple.thermalmonitord
+com.apple.mobile.softwareupdated
+com.apple.OTATaskingAgent
+com.apple.softwareupdateservicesd
+com.apple.UsageTrackingAgent
+com.apple.spotlightknowledged
+com.apple.accessoryupdater
+com.apple.MobileAccessoryUpdater
+```
+For example: if your disabled.plist file looks like this and you find `com.apple.UsageTrackingAgent` key-value pair listed above, you will need to delete it.
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.UsageTrackingAgent</key>
+	<true/>
+	<key>com.apple.bootpd</key>
+	<true/>
+	<key>com.apple.dhcp6d</key>
+	<true/>
+	<key>com.apple.ftp-proxy-embedded</key>
+	<false/>
+	<key>com.apple.magicswitchd.companion</key>
+	<true/>
+	<key>com.apple.relevanced</key>
+	<true/>
+	<key>com.apple.security.otpaird</key>
+	<true/>
+</dict>
+</plist>
+```
+After deleting `com.apple.UsageTrackingAgent` key-value pair, it should look like this:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.bootpd</key>
+	<true/>
+	<key>com.apple.dhcp6d</key>
+	<true/>
+	<key>com.apple.ftp-proxy-embedded</key>
+	<false/>
+	<key>com.apple.magicswitchd.companion</key>
+	<true/>
+	<key>com.apple.relevanced</key>
+	<true/>
+	<key>com.apple.security.otpaird</key>
+	<true/>
+</dict>
+</plist>
+```
+Restoring this modified backup will undo all the modifications.
+## Running
 
 Require:
 - Python 3.8-3.11  (You can run `python3 --version` to check Python version)
