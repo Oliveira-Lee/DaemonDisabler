@@ -54,7 +54,7 @@ class App(QtWidgets.QWidget):
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
                     "Disable spotlightknowledged",
-                    "Disable MobileAccessoryUpdater(experimental)"
+                    "Disable mobileaccessoryupdater(experimental)"
                 ],
                 "menu_options_tips": [
                     "Lock thermal state at Normal\nThis will prevent screen brightness from being reduced due to high temperatures\nRunning apps won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
@@ -90,7 +90,7 @@ class App(QtWidgets.QWidget):
                     "禁用系统更新",
                     "禁用 UsageTrackingAgent",
                     "禁用 spotlightknowledged",
-                    "禁用 MobileAccessoryUpdater(实验性)"
+                    "禁用 mobileaccessoryupdater(实验性)"
                 ],
                 "menu_options_tips": [
                     "锁定热状态为Normal\n屏幕亮度不会在温度升高时降低\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
@@ -296,11 +296,13 @@ class App(QtWidgets.QWidget):
             plist.pop("com.apple.spotlightknowledged", None)
 
         if self.disable_mobileaccessoryupdater_checkbox.isChecked():
-            plist["com.apple.accessoryupdater"] = True
-            plist["com.apple.MobileAccessoryUpdater"] = True
+            plist["com.apple.mobileaccessoryupdater"] = True
+            plist["com.apple.UARPUpdaterServiceLegacyAudio"] = True
+            plist["com.apple.accessoryupdaterd"] = True
         else:
-            plist.pop("com.apple.accessoryupdater", None)
-            plist.pop("com.apple.MobileAccessoryUpdater", None)
+            plist.pop("com.apple.mobileaccessoryupdater", None)
+            plist.pop("com.apple.UARPUpdaterServiceLegacyAudio", None)
+            plist.pop("com.apple.accessoryupdaterd", None)
 
         return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
