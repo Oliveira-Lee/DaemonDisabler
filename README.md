@@ -23,8 +23,9 @@ com.apple.OTATaskingAgent
 com.apple.softwareupdateservicesd
 com.apple.UsageTrackingAgent
 com.apple.spotlightknowledged
-com.apple.accessoryupdater
-com.apple.MobileAccessoryUpdater
+com.apple.mobileaccessoryupdater
+com.apple.UARPUpdaterServiceLegacyAudio
+com.apple.accessoryupdaterd
 ```
 For example: if your disabled.plist file looks like this and you find `com.apple.UsageTrackingAgent` key-value pair listed above, you will need to delete it.
 ```

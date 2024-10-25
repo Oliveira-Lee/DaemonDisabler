@@ -22,8 +22,9 @@ com.apple.OTATaskingAgent
 com.apple.softwareupdateservicesd
 com.apple.UsageTrackingAgent
 com.apple.spotlightknowledged
-com.apple.accessoryupdater
-com.apple.MobileAccessoryUpdater
+com.apple.mobileaccessoryupdater
+com.apple.UARPUpdaterServiceLegacyAudio
+com.apple.accessoryupdaterd
 ```
 举例：假设您的`disabled.plist`文件是这样，您发现上面列出的`com.apple.UsageTrackingAgent`键值对在里面。因此您需要删除它。
 ```
