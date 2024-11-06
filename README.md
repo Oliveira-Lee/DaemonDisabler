@@ -5,9 +5,9 @@ A tool for disabling certain daemons in iOS.
 
 **Use this software at your own risk. Make a backup before using it.**
 
-Compatible with iOS 15.7-iOS 17.7；iOS 18.0-iOS 18.1 beta 4
+Compatible with iOS 15.7-iOS 18.1
 
-**Important**: Any modifications made to iOS using this software will persist even after upgrading iOS. However, upgrading to an unsupported version will prevent you from undoing these modifications through this software. Additionally, these modifications will be included in your device backups and restored to any device, as well as transferred when you use this device to set up a new device.
+<!--**Important**: Any modifications made to iOS using this software will persist even after upgrading iOS. However, upgrading to an unsupported version will prevent you from undoing these modifications through this software. Additionally, these modifications will be included in your device backups and restored to any device, as well as transferred when you use this device to set up a new device.
 
 In short: **You must undo all modifications before upgrading iOS, make a backup, or transferring data to another device。**
 
@@ -72,11 +72,11 @@ After deleting `com.apple.UsageTrackingAgent` key-value pair, it should look lik
 </plist>
 ```
 Restoring this modified backup will undo all the modifications.
-## Running
+## Running-->
 
 Require:
-- Python 3.8-3.11  (You can run `python3 --version` to check Python version)
-- usbmuxd (only on Linux)
+- Python 3.8-3.11
+- usbmuxd
 
 Note: It may be either `python`/`pip` or `python3`/`pip3` depending on your path.
 
