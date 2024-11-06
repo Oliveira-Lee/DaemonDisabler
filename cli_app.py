@@ -175,6 +175,7 @@ while running:
             disable_mobileaccessoryupdater = not disable_mobileaccessoryupdater
         elif choice == 6:
             try:
+                files_to_restore = []
                 print("\n" + language_pack[language]["apply_changes"])
                 plist_data = modify_disabled_plist(
                     add_thermalmonitord=thermalmonitord,
@@ -184,11 +185,15 @@ while running:
                     add_mobileaccessoryupdater=disable_mobileaccessoryupdater
                 )
 
-                restore_files(files=[FileToRestore(
+                files_to_restore.append(FileToRestore(
                     contents=plist_data,
-                    restore_path="/var/db/com.apple.xpc.launchd/",
-                    restore_name="disabled.plist"
-                )], reboot=True, lockdown_client=device.ld)
+                    restore_path="com.apple.xpc.launchd/disabled.plist",
+                    domain="DatabaseDomain",
+                    owner=0,
+                    group=0
+                ))
+                print(files_to_restore)
+                restore_files(files=files_to_restore, reboot=True, lockdown_client=device.ld)
             except Exception as e:
                 print(language_pack[language]["error"])
                 print(traceback.format_exc())

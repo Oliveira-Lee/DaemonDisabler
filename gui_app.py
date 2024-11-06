@@ -315,15 +315,19 @@ class App(QtWidgets.QWidget):
 
     def _execute_changes(self):
         try:
+            files_to_restore = []
             print("\n" + self.language_pack[self.language]["apply_changes"])
             plist_data = self.modify_disabled_plist()
 
-            restore_files(files=[FileToRestore(
+            files_to_restore.append(FileToRestore(
                 contents=plist_data,
-                restore_path="/var/db/com.apple.xpc.launchd/",
-                restore_name="disabled.plist"
-            )], reboot=True, lockdown_client=self.device.ld)
-
+                restore_path="com.apple.xpc.launchd/disabled.plist",
+                domain="DatabaseDomain",
+                owner=0,
+                group=0
+            ))
+            print(files_to_restore)
+            restore_files(files=files_to_restore, reboot=True, lockdown_client=self.device.ld)
             QtWidgets.QMessageBox.information(self, "Success", self.language_pack[self.language]["success"])
         except Exception as e:
             error_message = str(e)
