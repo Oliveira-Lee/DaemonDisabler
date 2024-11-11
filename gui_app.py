@@ -43,6 +43,7 @@ class App(QtWidgets.QWidget):
                 "success": "Changes applied successfully!\nRemember to turn Find My back on!",
                 "error": "An error occurred while applying changes: ",
                 "error_find_my": "\nFind My must be disabled in order to use this tool.",
+                "mdm_encrypted_backup": "Encrypted Backup MDM setting present on device",
                 "error_connecting": "Error connecting to device",
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
@@ -79,6 +80,7 @@ class App(QtWidgets.QWidget):
                 "success": "更改已成功应用！\n记得重新启用查找！",
                 "error": "应用更改时发生错误: ",
                 "error_find_my": "设备未关闭查找",
+                "mdm_encrypted_backup": "设备的 MDM 策略强制加密备份",
                 "error_connecting": "连接设备时发生错误",
                 "goodbye": "再见！",
                 "input_prompt": "请输入选项: ",
@@ -331,11 +333,13 @@ class App(QtWidgets.QWidget):
             QtWidgets.QMessageBox.information(self, "Success", self.language_pack[self.language]["success"])
         except Exception as e:
             error_message = str(e)
-            if 'MBErrorDomain/211' in error_message:
+            if '(MBErrorDomain/211)' in error_message:
                 QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["error_find_my"])
             # https://gist.github.com/leminlimez/c602c067349140fe979410ef69d39c28#the-patch
-            elif 'MBErrorDomain/205' in error_message:
+            elif '(MBErrorDomain/205)' in error_message:
                 QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["not_supported"])
+            elif '(MBErrorDomain/22)' in error_message:
+                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["mdm_encrypted_backup"])
             else:
                 QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
             print(traceback.format_exc())
