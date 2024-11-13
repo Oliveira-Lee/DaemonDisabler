@@ -6,7 +6,7 @@ import subprocess
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtCore import QLocale
+from PyQt5.QtCore import QLocale, QEvent
 import qdarktheme
 
 import resources_rc
@@ -20,6 +20,7 @@ class App(QtWidgets.QWidget):
 
         locale = QLocale.system().name()
         self.language = "zh" if locale.startswith("zh") else "en"
+        self.s_language = self.language
 
         self.thermalmonitord = False
         self.disable_ota = False
@@ -120,6 +121,12 @@ class App(QtWidgets.QWidget):
             return " " + "(" + self.language_pack[self.language]["title_ext_info"] + ")"
         else:
             return ""
+
+    def closeEvent(self, event: QEvent):
+        if self.s_language == "zh" and self.frozen():
+            QtWidgets.QMessageBox.information(self, " ", "如果软件有帮到您\n请给项目点颗星, 谢谢!")
+            self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
+            event.accept()
 
     def set_font(self):
         if platform.system() == "Windows":
