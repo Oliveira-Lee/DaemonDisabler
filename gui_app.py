@@ -30,6 +30,7 @@ class App(QtWidgets.QWidget):
         self.language_pack = {
             "en": {
                 "title": "Daemon Disabler",
+                "title_ext_info": "Packaged distribution",
                 "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modify based on rponeawa's work.",
                 "backup_warning": "Please back up your device before using!",
                 "connect_prompt": "Please connect your device and try again!",
@@ -67,6 +68,7 @@ class App(QtWidgets.QWidget):
             },
             "zh": {
                 "title": "守护程序禁用工具",
+                "title_ext_info": "打包分发版",
                 "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在 rponeawa 的基础上进行了再次修改。",
                 "backup_warning": "使用前请备份您的设备！",
                 "connect_prompt": "请连接设备并重试！",
@@ -104,8 +106,20 @@ class App(QtWidgets.QWidget):
             }
         }
 
+        if self.language == "zh" and self.frozen():
+                QtWidgets.QMessageBox.information(self, "不受支持的版本", "请不要分发此文件\n软件作者无法对此版本提供技术支持")
         self.init_ui()
         self.get_device_info()
+
+    def frozen(self):
+        if getattr(sys, 'frozen', False):
+            return True
+
+    def title_ext_info(self):
+        if self.frozen ():
+            return " " + "(" + self.language_pack[self.language]["title_ext_info"] + ")"
+        else:
+            return ""
 
     def set_font(self):
         if platform.system() == "Windows":
@@ -113,7 +127,7 @@ class App(QtWidgets.QWidget):
             QtWidgets.QApplication.setFont(font)
 
     def init_ui(self):
-        self.setWindowTitle(self.language_pack[self.language]["title"])
+        self.setWindowTitle(self.language_pack[self.language]["title"] + self.title_ext_info())
 
         self.set_font()
 
@@ -349,7 +363,7 @@ class App(QtWidgets.QWidget):
 
     def switch_language(self):
         self.language = "zh" if self.language == "en" else "en"
-        self.setWindowTitle(self.language_pack[self.language]["title"])
+        self.setWindowTitle(self.language_pack[self.language]["title"] + self.title_ext_info())
 
         self.modified_by_label.setText(self.language_pack[self.language]["modified_by"])
 
