@@ -33,8 +33,8 @@ language_pack = {
             "[{check}] 1. Disable thermalmonitord",
             "[{check}] 2. Disable OTA",
             "[{check}] 3. Disable UsageTrackingAgent",
-            "[{check}] 4. Disable spotlightknowledged (experimental)",
-            "[{check}] 5. Disable MobileAccessoryUpdater (experimental) ",
+            "[{check}] 4. Disable spotlightknowledged",
+            "[{check}] 5. Disable MobileAccessoryUpdater",
             "6. Apply changes",
             "7. 切换到简体中文",
             "0. Exit"
@@ -58,8 +58,8 @@ language_pack = {
             "[{check}] 1. 禁用 thermalmonitord (热状态监测,禁用后热状态将始终为Normal,同时电池显示未知部件)",
             "[{check}] 2. 禁用系统更新",
             "[{check}] 3. 禁用 UsageTrackingAgent (使用状态追踪,禁用后将大幅缓解高负载状态下的卡顿情况)",
-            "[{check}] 4. 禁用 spotlightknowledged (测试)",
-            "[{check}] 5. 禁用 MobileAccessoryUpdater (测试)",
+            "[{check}] 4. 禁用 spotlightknowledged",
+            "[{check}] 5. 禁用 MobileAccessoryUpdater",
             "6. 应用更改",
             "7. Switch to English",
             "0. 退出"

@@ -55,14 +55,14 @@ class App(QtWidgets.QWidget):
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
                     "Disable spotlightknowledged",
-                    "Disable mobileaccessoryupdater(experimental)"
+                    "Disable mobileaccessoryupdater"
                 ],
                 "menu_options_tips": [
                     "Lock thermal state at Normal\nThis will prevent screen brightness from being reduced due to high temperatures\nRunning apps won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
                     "Disable services related to system updates",
                     "This service intermittently consumes a large amount of CPU\nDisabling it can significantly reduce heat during high loads and improve performance",
-                    "In early versions of iOS 17, there is a bug that causes this service to use significant CPU resources\nYou don't need to disable this service when running iOS 17.5 or above\n*Disabling this service may prevent Spotlight from indexing new content",
-                    "Disabling this service may prevent firmware updates for accessories (e.g. Airpods)"
+                    "In iOS 17, there is a bug that causes this service to use significant CPU resources.\nIf there are multiple reports starting with \"spotlightknowledged.cpu_resource\" \nin analytics data, you might consider disabling this service.",
+                    "Disabling this service can prevent device from updating the firmware of accessories such as Airpods"
                 ]
             },
             "zh": {
@@ -92,14 +92,14 @@ class App(QtWidgets.QWidget):
                     "禁用系统更新",
                     "禁用 UsageTrackingAgent",
                     "禁用 spotlightknowledged",
-                    "禁用 mobileaccessoryupdater(实验性)"
+                    "禁用 mobileaccessoryupdater"
                 ],
                 "menu_options_tips": [
                     "锁定热状态为Normal\n屏幕亮度不会在温度升高时降低\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
                     "禁用系统更新相关的服务",
                     "此服务间歇性占用大量CPU\n禁用可显著降低高负载时的发热并改善卡顿情况",
-                    "在iOS 17早期版本中, 有bug会导致此服务占用大量CPU\n如果设备分析数据中存在多条 spotlightknowledged.cpu_resource 开头的报告 说明你可能受到此问题的影响\n该问题在iOS 17.5左右被修复 如果你的 iOS 版本更高则无需禁用此项\n*禁用此服务可能会阻止 spotlight 索引新内容但不影响搜索功能",
-                    "禁用此服务可能会阻止配件的固件更新(像是Airpods)"
+                    "在iOS 17中, 有bug会导致此服务占用大量CPU\n如果设备分析数据中存在多条 spotlightknowledged.cpu_resource 开头的报告 说明你可能受到此问题的影响\n*禁用此服务不会影响 spotlight 搜索",
+                    "禁用此服务可以阻止设备更新 Airpods 等配件的固件"
                 ]
             }
         }
