@@ -13,17 +13,20 @@ args = [
     '--hidden-import=zeroconf',
     '--hidden-import=zeroconf._utils.ipaddress',
     '--hidden-import=zeroconf._handlers.answers',
-    '--onedir',
     '--name=DaemonDisabler',
     '--windowed',
     '--noconfirm'
 ]
 
 if platform == "darwin":
+    args.append('--onedir')
     if universal2():
         args.append('--target-arch=universal2')
+else:
+    args.append('--onefile')
 
 PyInstaller.__main__.run(args)
 
 if platform == "darwin":
     shutil.rmtree('./dist/_internal', ignore_errors=True)
+    shutil.rmtree('./dist/DaemonDisabler', ignore_errors=True)
