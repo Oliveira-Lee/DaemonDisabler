@@ -18,6 +18,7 @@ class App(QtWidgets.QWidget):
         super().__init__()
         self.device = None
 
+        self.msgbox = QtWidgets.QMessageBox()
         locale = QLocale.system().name()
         self.language = "zh" if locale.startswith("zh") else "en"
         self.s_language = self.language
@@ -108,7 +109,7 @@ class App(QtWidgets.QWidget):
         }
 
         if self.language == "zh" and self.frozen():
-                QtWidgets.QMessageBox.information(self, "不受支持的版本", "请不要分发此文件\n软件作者无法对此版本提供技术支持")
+                self.msgbox.information(self, "不受支持的版本", "请不要分发此文件\n软件作者无法对此版本提供技术支持")
         self.init_ui()
         self.get_device_info()
 
@@ -124,8 +125,8 @@ class App(QtWidgets.QWidget):
 
     def closeEvent(self, event: QEvent):
         if self.s_language == "zh" and self.frozen():
-            QtWidgets.QMessageBox.information(self, " ", "如果软件有帮到您\n请给项目点颗星, 谢谢!")
-            self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
+            if self.msgbox.information(self, " ", "如果软件有帮到您\n请给项目点颗星, 谢谢!", self.msgbox.Yes | self.msgbox.No, self.msgbox.Yes) == self.msgbox.Yes:
+                self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
             event.accept()
 
     def set_font(self):
@@ -351,18 +352,18 @@ class App(QtWidgets.QWidget):
             ))
             print(files_to_restore)
             restore_files(files=files_to_restore, reboot=True, lockdown_client=self.device.ld)
-            QtWidgets.QMessageBox.information(self, "Success", self.language_pack[self.language]["success"])
+            self.msgbox.information(self, "Success", self.language_pack[self.language]["success"])
         except Exception as e:
             error_message = str(e)
             if '(MBErrorDomain/211)' in error_message:
-                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["error_find_my"])
+                self.msgbox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["error_find_my"])
             # https://gist.github.com/leminlimez/c602c067349140fe979410ef69d39c28#the-patch
             elif '(MBErrorDomain/205)' in error_message:
-                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["not_supported"])
+                self.msgbox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["not_supported"])
             elif '(MBErrorDomain/22)' in error_message:
-                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["mdm_encrypted_backup"])
+                self.msgbox.critical(self, "Error", self.language_pack[self.language]["error"] + self.language_pack[self.language]["mdm_encrypted_backup"])
             else:
-                QtWidgets.QMessageBox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
+                self.msgbox.critical(self, "Error", self.language_pack[self.language]["error"] + str(e))
             print(traceback.format_exc())
         finally:
             self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
