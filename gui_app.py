@@ -6,7 +6,7 @@ import subprocess
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtCore import QLocale, QEvent
+from PyQt5.QtCore import QLocale, QEvent, Qt
 import qdarktheme
 
 import resources_rc
@@ -33,7 +33,8 @@ class App(QtWidgets.QWidget):
             "en": {
                 "title": "Daemon Disabler",
                 "title_ext_info": "Packaged distribution",
-                "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modify based on rponeawa's work.",
+                "about": "\nBased on thermalmonitordDisabler by rponeawa.\n\nthermalmonitordDisabler based on Nugget by leminlimez.",
+                "description": "A tool for disable iOS services. \nLeave all options unchecked and click apply to re-enable services.",
                 "backup_warning": "Please back up your device before using!",
                 "connect_prompt": "Please connect your device and try again!",
                 "connected": "Connected to",
@@ -50,7 +51,7 @@ class App(QtWidgets.QWidget):
                 "error_connecting": "Error connecting to device",
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
-                "apply_changes": "Apply Changes",
+                "apply_changes": "Apply",
                 "switch_lang": "切换到中文",
                 "refresh": "Refresh",
                 "menu_options": [
@@ -71,7 +72,8 @@ class App(QtWidgets.QWidget):
             "zh": {
                 "title": "守护程序禁用工具",
                 "title_ext_info": "打包分发版",
-                "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在 rponeawa 的基础上进行了再次修改。",
+                "about": "\n这是基于 rponeawa 的 thermalmonitordDisabler 的一个修改版。\n\nthermalmonitordDisabler 基于 leminlimez 的 Nugget",
+                "description": "用于禁用 iOS 上的守护程序\n保持所有选项为未勾选状态下应用更改\n即可撤销修改",
                 "backup_warning": "使用前请备份您的设备！",
                 "connect_prompt": "请连接设备并重试！",
                 "connected": "已连接到",
@@ -81,7 +83,7 @@ class App(QtWidgets.QWidget):
                 "supported_versions_tip": "当前版本不在支持范围内\n支持的版本:\niOS 15.7+",
                 "apply_changes": "正在应用更改到 disabled.plist...",
                 "applying_changes": "正在应用修改...",
-                "success": "更改已成功应用！\n记得重新启用查找！",
+                "success": "更改已成功应用！\n记得重新启用查找!",
                 "error": "应用更改时发生错误: ",
                 "error_find_my": "设备未关闭查找",
                 "mdm_encrypted_backup": "设备的 MDM 策略强制加密备份",
@@ -125,7 +127,7 @@ class App(QtWidgets.QWidget):
 
     def closeEvent(self, event: QEvent):
         if self.s_language == "zh" and self.frozen():
-            if self.msgbox.information(self, " ", "如果软件有帮到您\n请给项目点颗星, 谢谢!", self.msgbox.Yes | self.msgbox.No, self.msgbox.Yes) == self.msgbox.Yes:
+            if self.msgbox.information(self, self.language_pack[self.language]["title"] + self.title_ext_info(), "如果软件有帮到您\n请给项目点颗星, 谢谢!", self.msgbox.Yes | self.msgbox.No, self.msgbox.Yes) == self.msgbox.Yes:
                 self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
             event.accept()
 
@@ -136,30 +138,40 @@ class App(QtWidgets.QWidget):
 
     def init_ui(self):
         self.setWindowTitle(self.language_pack[self.language]["title"] + self.title_ext_info())
+        self.setWindowIcon(QtGui.QIcon(":/icon.svg"))
 
         self.set_font()
 
         self.layout = QtWidgets.QVBoxLayout()
+        self.setWindowFlag(Qt.WindowMaximizeButtonHint, False)
+        self.setFixedSize(350, 440)
 
-        self.modified_by_label = QtWidgets.QLabel(self.language_pack[self.language]["modified_by"])
-        self.layout.addWidget(self.modified_by_label)
+        self.description_label = QtWidgets.QLabel(self.language_pack[self.language]["description"])
+        self.description_label.setWordWrap(True)
+        self.layout.addWidget(self.description_label)
 
         self.icon_layout = QtWidgets.QHBoxLayout()
 
         self.icon_layout.setAlignment(QtCore.Qt.AlignLeft)
         self.icon_layout.setSpacing(10)
 
+        self.about_icon = QSvgWidget(":/about.svg")
+        self.about_icon.setFixedSize(24, 24)
+        self.about_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.about_icon.mouseReleaseEvent = lambda event: self.msgbox.about(self, "About" + " " + self.language_pack[self.language]["title"] + self.title_ext_info(), self.language_pack[self.language]["about"])
+        self.about_icon.setToolTip("About")
+
         self.github_icon = QSvgWidget(":/brand-github.svg")
         self.github_icon.setFixedSize(24, 24)
         self.github_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.github_icon.mouseReleaseEvent = lambda event: self.open_link("https://github.com/rponeawa/thermalmonitordDisabler")
-        self.github_icon.setToolTip("rponeawa 的仓库地址")
+        self.github_icon.setToolTip("原作者 rponeawa 的仓库地址")
 
         self.bilibili_icon = QSvgWidget(":/brand-bilibili.svg")
         self.bilibili_icon.setFixedSize(24, 24)
         self.bilibili_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.bilibili_icon.mouseReleaseEvent = lambda event: self.open_link("https://space.bilibili.com/332095459")
-        self.bilibili_icon.setToolTip("rponeawa 的B站主页")
+        self.bilibili_icon.setToolTip("原作者 rponeawa 的B站主页")
 
         self.github_icon_r = QSvgWidget(":/brand-github.svg")
         self.github_icon_r.setFixedSize(24, 24)
@@ -167,6 +179,7 @@ class App(QtWidgets.QWidget):
         self.github_icon_r.mouseReleaseEvent = lambda event: self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
         self.github_icon_r.setToolTip("本项目的仓库地址")
 
+        self.icon_layout.addWidget(self.about_icon)
         self.icon_layout.addWidget(self.github_icon)
         self.icon_layout.addWidget(self.bilibili_icon)
         self.icon_layout.addWidget(self.github_icon_r)
@@ -183,6 +196,7 @@ class App(QtWidgets.QWidget):
         self.layout.addLayout(self.icon_layout)
 
         self.device_info = QtWidgets.QLabel(self.language_pack[self.language]["backup_warning"])
+        self.device_info.setWordWrap(True)
         self.layout.addWidget(self.device_info)
 
         self.thermalmonitord_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][0])
@@ -373,7 +387,7 @@ class App(QtWidgets.QWidget):
         self.language = "zh" if self.language == "en" else "en"
         self.setWindowTitle(self.language_pack[self.language]["title"] + self.title_ext_info())
 
-        self.modified_by_label.setText(self.language_pack[self.language]["modified_by"])
+        self.description_label.setText(self.language_pack[self.language]["description"])
 
         if self.device:
             self.update_device_info()

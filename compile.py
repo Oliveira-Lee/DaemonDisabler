@@ -15,6 +15,7 @@ args = [
     '--hidden-import=zeroconf._handlers.answers',
     '--name=DaemonDisabler',
     '--windowed',
+    '--icon=icon/icon.ico',
     '--noconfirm'
 ]
 
