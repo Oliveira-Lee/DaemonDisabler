@@ -22,7 +22,7 @@ default_disabled_plist = {
 language_pack = {
     "en": {
         "title": "Daemon Disabler",
-        "modified_by": "Modified by rponeawa from LeminLimez's Nugget.\nringojuice made a re-modifiy based on rponeawa's work.",
+        "modified_by": "Based on thermalmonitordDisabler by rponeawa.\nthermalmonitordDisabler based on Nugget by leminlimez.",
         "backup_warning": "Please back up your device before using!",
         "connect_prompt": "Please connect your device and try again!",
         "connected": "Connected to",
@@ -47,7 +47,7 @@ language_pack = {
     },
     "zh": {
         "title": "守护程序禁用工具",
-        "modified_by": "由 rponeawa 基于 LeminLimez 的 Nugget 修改。\nringojuice 在 rponeawa 的基础上进行了再次修改。",
+        "modified_by": "这是基于 rponeawa 的 thermalmonitordDisabler 的一个修改版。\nthermalmonitordDisabler 基于 leminlimez 的 Nugget",
         "backup_warning": "使用前请备份您的设备！",
         "connect_prompt": "请连接设备并重试！",
         "connected": "已连接到",
