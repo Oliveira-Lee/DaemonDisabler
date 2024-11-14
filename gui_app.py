@@ -48,7 +48,9 @@ class App(QtWidgets.QWidget):
                 "error": "An error occurred while applying changes: ",
                 "error_find_my": "\nFind My must be disabled in order to use this tool.",
                 "mdm_encrypted_backup": "Encrypted Backup MDM setting present on device",
-                "error_connecting": "Error connecting to device",
+                "error_connecting": "Error connecting to device: ",
+                "device_locked": "Device locked",
+                "denied_pairing": "Pairing denied",
                 "goodbye": "Goodbye!",
                 "input_prompt": "Enter a number: ",
                 "apply_changes": "Apply",
@@ -82,12 +84,14 @@ class App(QtWidgets.QWidget):
                 "not_supported": "不支持的版本",
                 "supported_versions_tip": "当前版本不在支持范围内\n支持的版本:\niOS 15.7+",
                 "apply_changes": "正在应用更改到 disabled.plist...",
-                "applying_changes": "正在应用修改...",
+                "applying_changes": "正在应用更改...",
                 "success": "更改已成功应用！\n记得重新启用查找!",
                 "error": "应用更改时发生错误: ",
                 "error_find_my": "设备未关闭查找",
                 "mdm_encrypted_backup": "设备的 MDM 策略强制加密备份",
-                "error_connecting": "连接设备时发生错误",
+                "error_connecting": "连接设备时发生错误: ",
+                "device_locked": "设备未解锁",
+                "denied_pairing": "用户拒绝配对",
                 "goodbye": "再见！",
                 "input_prompt": "请输入选项: ",
                 "apply_changes": "应用更改",
@@ -269,7 +273,13 @@ class App(QtWidgets.QWidget):
                         self.disable_controls(True)
                     return
                 except Exception as e:
-                    self.device_info.setText(self.language_pack[self.language]["error_connecting"] + str(e))
+                    error_message = str(e)
+                    if 'PasswordProtected' in error_message:
+                        self.device_info.setText(self.language_pack[self.language]["error_connecting"] + self.language_pack[self.language]["device_locked"])
+                    elif 'UserDeniedPairing' in error_message:
+                        self.device_info.setText(self.language_pack[self.language]["error_connecting"] + self.language_pack[self.language]["denied_pairing"])
+                    else:
+                        self.device_info.setText(self.language_pack[self.language]["error_connecting"] + str(e))
                     print(traceback.format_exc())
                     return
 
