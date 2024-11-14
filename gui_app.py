@@ -119,6 +119,28 @@ class App(QtWidgets.QWidget):
         self.init_ui()
         self.get_device_info()
 
+    def get_version(self):
+        git_dir = '.git'
+        head_file = os.path.join(git_dir, 'HEAD')
+        tags_dir = os.path.join(git_dir, 'refs', 'tags')
+        if os.path.isdir(tags_dir):
+            tags = os.listdir(tags_dir)
+            if tags:
+                latest_tag = sorted(tags)[-1]
+                return latest_tag
+        if os.path.exists(head_file):
+            with open(head_file, 'r') as f:
+                ref_line = f.readline().strip()
+                if ref_line.startswith('ref:'):
+                    ref_path = ref_line.split(' ')[1]
+                    commit_hash_file = os.path.join(git_dir, ref_path)
+                    if os.path.exists(commit_hash_file):
+                        with open(commit_hash_file, 'r') as commit_file:
+                            return commit_file.readline().strip()[:7]
+                else:
+                    return ref_line[:7]
+        return ""
+
     def frozen(self):
         if getattr(sys, 'frozen', False):
             return True
@@ -127,7 +149,7 @@ class App(QtWidgets.QWidget):
         if self.frozen ():
             return " " + "(" + self.language_pack[self.language]["title_ext_info"] + ")"
         else:
-            return ""
+            return " " + self.get_version()
 
     def closeEvent(self, event: QEvent):
         if self.s_language == "zh" and self.frozen():
