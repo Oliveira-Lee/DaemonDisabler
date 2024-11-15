@@ -90,8 +90,6 @@ com.apple.accessoryupdaterd
 
 - usbmuxd
 
-注意：根据您的路径，以下命令可能是 `python`/`pip` 或 `python3`/`pip3`。
-
 ### 拉取仓库
 
 ```
@@ -102,18 +100,18 @@ cd DaemonDisabler
 ### 创建虚拟环境
 
 ```
-python3 -m venv .venv
+python -m venv .venv
 ```
 
-这将会在当前目录下的 `.venv`目录中创建虚拟环境。
+这将会在当前目录下的 `.venv` 目录中创建虚拟环境。
 
 ### 启用虚拟环境 (Windows)
 
 ```
-.\.venv\Scripts\Activate.ps1
+.\.venv\Scripts\activate
 ```
 
-如果您看到您的 prompt 前出现了 `(.venv)`字样，说明您启用了虚拟环境。虚拟环境会在您关闭当前终端，或者是您执行 `deactivate`之后关闭。在虚拟环境关闭后您需要重新启用才能运行程序。
+如果您看到您的 prompt 前出现了 `(.venv)` 字样，说明您启用了虚拟环境。虚拟环境会在您关闭当前终端，或者是您执行 `deactivate` 之后关闭。在虚拟环境关闭后您需要重新启用才能运行程序。
 
 如果 Powershell 提示您在此系统上禁止运行脚本，您需要以管理员权限执行下面的命令
 
@@ -129,36 +127,34 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 . .venv/bin/activate
 ```
 
-虚拟环境会在您关闭当前终端，或者是您执行 `deactivate`之后关闭。在虚拟环境关闭后您需要重新启用才能运行程序。
+虚拟环境会在您关闭当前终端，或者是您执行 `deactivate` 之后关闭。在虚拟环境关闭后您需要重新启用才能运行程序。
 
 ### 安装依赖
 
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 运行程序 (命令行)
 
 ```
-python3 cli_app.py
+python cli_app.py
 ```
 
 ### 运行程序 (GUI)
 
 ```
-python3 gui_app.py
+python gui_app.py
 ```
 
-**如果 Linux 运行报错或无响应，首先检查 usbmuxd 服务是否运行。**
-
-**要使用此工具，必须关闭“查找我的 iPhone”。**
+如果 Linux 运行报错或无响应，首先检查 usbmuxd 服务是否运行。
 
 ## 构建程序
 
 如果您希望在没有安装 Python 环境的系统中运行程序，可以执行下面的命令构建可执行档。
 
 ```
-python3 compile.py
+python compile.py
 ```
 
 构建的可执行档位于 `./dist`

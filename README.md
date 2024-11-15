@@ -92,8 +92,6 @@ Restoring this modified backup will undo all the modifications.
 
 * usbmuxd
 
-Note: It may be either `python`/`pip` or `python3`/`pip3` depending on your path.
-
 ### Clone the Repository
 
 ```
@@ -104,7 +102,7 @@ cd DaemonDisabler
 ### Create venv
 
 ```
-python3 -m venv .venv
+python -m venv .venv
 ```
 
 This will create a virtual environment in  `.venv` directory under the current directory.
@@ -112,7 +110,7 @@ This will create a virtual environment in  `.venv` directory under the current d
 ### Activate venv (Windows)
 
 ```
-.\.venv\Scripts\Activate.ps1
+.\.venv\Scripts\activate
 ```
 
 If you see `(.venv)` appear in front of your prompt, it means you have successfully activated the virtual environment. The virtual environment will deactivate when you close the current terminal or execute `deactivate` command.
@@ -136,31 +134,29 @@ The virtual environment will deactivate when you close the current terminal or e
 ### Install Dependencies
 
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### Run the Program (Command Line)
 
 ```
-python3 cli_app.py
+python cli_app.py
 ```
 
 ### Run the Program (GUI)
 
 ```
-python3 gui_app.py
+python gui_app.py
 ```
 
-**If it can't start or isn't responding on Linux, make sure  `usbmuxd` service is running.**
-
-**You must disable “Find My iPhone” to use this tool.**
+If it can't start or isn't responding on Linux, make sure  `usbmuxd` service is running.
 
 ## Building
 
 If you want to run the program on a system without Python installed, you can build an executable with following command:
 
 ```
-python3 compile.py
+python compile.py
 ```
 
 Executables will be located in `./dist` .
