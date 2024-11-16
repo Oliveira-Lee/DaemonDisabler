@@ -74,7 +74,7 @@ class App(QtWidgets.QWidget):
             "zh": {
                 "title": "守护程序禁用工具",
                 "title_ext_info": "打包分发版",
-                "about": "\n这是基于 rponeawa 的 thermalmonitordDisabler 的一个修改版。\n\nthermalmonitordDisabler 基于 leminlimez 的 Nugget",
+                "about": "\n基于 rponeawa 的 thermalmonitordDisabler\n\nthermalmonitordDisabler 基于 leminlimez 的 Nugget",
                 "description": "用于禁用 iOS 上的守护程序\n保持所有选项为未勾选状态下应用更改\n即可撤销修改",
                 "backup_warning": "使用前请备份您的设备！",
                 "connect_prompt": "请连接设备并重试！",
@@ -120,26 +120,32 @@ class App(QtWidgets.QWidget):
         self.get_device_info()
 
     def get_version(self):
-        git_dir = '.git'
-        head_file = os.path.join(git_dir, 'HEAD')
-        tags_dir = os.path.join(git_dir, 'refs', 'tags')
-        if os.path.isdir(tags_dir):
-            tags = os.listdir(tags_dir)
-            if tags:
-                latest_tag = sorted(tags)[-1]
-                return latest_tag
-        if os.path.exists(head_file):
-            with open(head_file, 'r') as f:
-                ref_line = f.readline().strip()
-                if ref_line.startswith('ref:'):
-                    ref_path = ref_line.split(' ')[1]
-                    commit_hash_file = os.path.join(git_dir, ref_path)
-                    if os.path.exists(commit_hash_file):
-                        with open(commit_hash_file, 'r') as commit_file:
-                            return commit_file.readline().strip()[:7]
-                else:
-                    return ref_line[:7]
-        return ""
+        if self.frozen():
+            try:
+                return open(os.path.join(sys._MEIPASS, 'version'), 'r').read().strip()
+            except:
+                return ""
+        else:
+            git_dir = '.git'
+            head_file = os.path.join(git_dir, 'HEAD')
+            tags_dir = os.path.join(git_dir, 'refs', 'tags')
+            if os.path.isdir(tags_dir):
+                tags = os.listdir(tags_dir)
+                if tags:
+                    latest_tag = sorted(tags)[-1]
+                    return latest_tag
+            if os.path.exists(head_file):
+                with open(head_file, 'r') as f:
+                    ref_line = f.readline().strip()
+                    if ref_line.startswith('ref:'):
+                        ref_path = ref_line.split(' ')[1]
+                        commit_hash_file = os.path.join(git_dir, ref_path)
+                        if os.path.exists(commit_hash_file):
+                            with open(commit_hash_file, 'r') as commit_file:
+                                return commit_file.readline().strip()[:7]
+                    else:
+                        return ref_line[:7]
+            return ""
 
     def frozen(self):
         if getattr(sys, 'frozen', False):
@@ -147,13 +153,12 @@ class App(QtWidgets.QWidget):
 
     def title_ext_info(self):
         if self.frozen ():
-            return " " + "(" + self.language_pack[self.language]["title_ext_info"] + ")"
-        else:
-            return " " + self.get_version()
+            return "(" + self.language_pack[self.language]["title_ext_info"] + ")"
+        return ""
 
     def closeEvent(self, event: QEvent):
         if self.s_language == "zh" and self.frozen():
-            if self.msgbox.information(self, self.language_pack[self.language]["title"] + self.title_ext_info(), "如果软件有帮到您\n请给项目点颗星, 谢谢!", self.msgbox.Yes | self.msgbox.No, self.msgbox.Yes) == self.msgbox.Yes:
+            if self.msgbox.information(self, self.language_pack[self.language]["title"] + " " + self.get_version(), "如果软件有帮到您\n请给项目点颗星, 谢谢!", self.msgbox.Yes | self.msgbox.No, self.msgbox.Yes) == self.msgbox.Yes:
                 self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
             event.accept()
 
@@ -163,7 +168,7 @@ class App(QtWidgets.QWidget):
             QtWidgets.QApplication.setFont(font)
 
     def init_ui(self):
-        self.setWindowTitle(self.language_pack[self.language]["title"] + self.title_ext_info())
+        self.setWindowTitle(self.language_pack[self.language]["title"] + " " + self.get_version())
         self.setWindowIcon(QtGui.QIcon(":/icon.svg"))
 
         self.set_font()
@@ -184,7 +189,7 @@ class App(QtWidgets.QWidget):
         self.about_icon = QSvgWidget(":/about.svg")
         self.about_icon.setFixedSize(24, 24)
         self.about_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.about_icon.mouseReleaseEvent = lambda event: self.msgbox.about(self, "About" + " " + self.language_pack[self.language]["title"] + self.title_ext_info(), self.language_pack[self.language]["about"])
+        self.about_icon.mouseReleaseEvent = lambda event: self.msgbox.about(self, "About" + " " + self.language_pack[self.language]["title"] + " " + self.get_version() + " " + self.title_ext_info(), self.language_pack[self.language]["about"])
         self.about_icon.setToolTip("About")
 
         self.github_icon = QSvgWidget(":/brand-github.svg")
