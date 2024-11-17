@@ -64,7 +64,7 @@ class App(QtWidgets.QWidget):
                     "Disable mobileaccessoryupdater"
                 ],
                 "menu_options_tips": [
-                    "Lock thermal state at Normal\nThis will prevent screen brightness from being reduced due to high temperatures\nRunning apps won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
+                    "Lock thermal state at Normal\nApp won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
                     "Disable services related to system updates",
                     "This service intermittently consumes a large amount of CPU\nDisabling it can significantly reduce heat during high loads and improve performance",
                     "In iOS 17, there is a bug that causes this service to use significant CPU resources.\nIf there are multiple reports starting with \"spotlightknowledged.cpu_resource\" \nin analytics data, you might consider disabling this service.",
@@ -105,7 +105,7 @@ class App(QtWidgets.QWidget):
                     "禁用 mobileaccessoryupdater"
                 ],
                 "menu_options_tips": [
-                    "锁定热状态为Normal\n屏幕亮度不会在温度升高时降低\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
+                    "锁定热状态为Normal\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
                     "禁用系统更新相关的服务",
                     "此服务间歇性占用大量CPU\n禁用可显著降低高负载时的发热并改善卡顿情况",
                     "在iOS 17中, 有bug会导致此服务占用大量CPU\n如果设备分析数据中存在多条 spotlightknowledged.cpu_resource 开头的报告 说明你可能受到此问题的影响\n*禁用此服务不会影响 spotlight 搜索",
