@@ -4,6 +4,10 @@ from pymobiledevice3 import usbmux
 from pymobiledevice3.lockdown import create_using_usbmux
 import plistlib
 import traceback
+import os
+import subprocess
+import platform
+import time
 
 running = True
 device = None
@@ -76,6 +80,58 @@ language_pack = {
     }
 }
 
+def check_service(system_name, service_name):
+    if platform.system() == system_name:
+        service_ctl(service_name)
+
+def get_init_system():
+    try:
+        init_process = os.readlink('/sbin/init')
+        if 'systemd' in init_process:
+            return 'systemd'
+        elif 'openrc' in init_process:
+            return 'openrc'
+        return 'unknown'
+    except Exception as e:
+         print(f"error: Cannot determining init system: {e}")
+
+def service_ctl(service_name):
+    init_system = get_init_system()
+    command = get_command(init_system, service_name, 'status')
+
+    if command is None:
+        return
+
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    if 'could not be found' in result.stderr or 'does not exist' in result.stderr:
+        print(f"error: Check if '{service_name}' is installed.")
+        exit()
+    start_service(service_name)
+    time.sleep(3)
+
+def start_service(service_name):
+    init_system = get_init_system()
+    command = get_command(init_system, service_name, 'restart')
+
+    if command is None:
+        return
+
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    if result.returncode != 0:
+        print(f"error: Failed to start '{service_name}'.")
+        exit()
+
+def get_command(init_system, service_name, action):
+    if init_system == 'systemd':
+        return ['systemctl', action, service_name]
+    elif init_system == 'openrc':
+        return ['rc-service', service_name, action]
+    else:
+        print(f"error: Unsupported init system: {init_system}")
+        return None
+
 def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_spotlightknowledged=False, add_mobileaccessoryupdater=False):
     plist = default_disabled_plist.copy()
 
@@ -131,6 +187,7 @@ def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disab
         print(option.format(check=check))
 
 while running:
+    check_service('Linux', 'usbmuxd')
     print(language_pack[language]["title"] + "\n")
     print(language_pack[language]["modified_by"])
     print(language_pack[language]["backup_warning"] + "\n")
