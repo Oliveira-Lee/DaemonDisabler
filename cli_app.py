@@ -29,6 +29,8 @@ language_pack = {
         "ios_version": "iOS",
         "supported": "Supported",
         "not_supported": "Not Supported",
+        "partially_supported": "Partially Supported",
+        "partially_supported_tip": "Current iOS cannot skip setup screen.\nAfter reboot, when showing \"iPhone Partially Set Up\" screen,\nBe sure click the blue text \"Continue with Partial Setup\" (NOT the blue button).\nOtherwise your data will be ERASED.",
         "menu_options": [
             "[{check}] 1. Disable thermalmonitord",
             "[{check}] 2. Disable OTA",
@@ -54,6 +56,8 @@ language_pack = {
         "ios_version": "iOS",
         "supported": "支持的版本",
         "not_supported": "不支持的版本",
+        "partially_supported": "部分支持",
+        "partially_supported_tip": "当前 iOS 版本无法跳过设置页面\n在重启后提示\"iPhone 已进行部分设置\"时\n务必点击\"保留部分设置并继续\"\n否则将会造成无可挽回的数据丢失",
         "menu_options": [
             "[{check}] 1. 禁用 thermalmonitord (热状态监测,禁用后热状态将始终为Normal,同时电池显示未知部件)",
             "[{check}] 2. 禁用系统更新",
@@ -127,7 +131,7 @@ def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disab
         print(option.format(check=check))
 
 while running:
-    print(language_pack[language]["title"])
+    print(language_pack[language]["title"] + "\n")
     print(language_pack[language]["modified_by"])
     print(language_pack[language]["backup_warning"] + "\n")
 
@@ -148,8 +152,13 @@ while running:
         if device is None:
             print(language_pack[language]["connect_prompt"])
             input("Press Enter to continue...")
-    if device.supported():
-        print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['supported']})\n")
+    supported, partial = device.supported()
+    if supported:
+        if partial:
+            print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['partially_supported']})\n")
+            print(f"{language_pack[language]['partially_supported_tip']}\n")
+        else:
+            print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['supported']})\n")
     else:
         print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['not_supported']})\n")
 
@@ -161,8 +170,11 @@ while running:
 
     while True:
         print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_spotlightknowledged, disable_mobileaccessoryupdater)
-        choice = int(input(language_pack[language]["input_prompt"]))
-
+        try:
+            choice = int(input(language_pack[language]["input_prompt"]))
+        except ValueError:
+            choice = None
+            print()
         if choice == 1:
             thermalmonitord = not thermalmonitord
         elif choice == 2:
@@ -207,10 +219,15 @@ while running:
             print(language_pack[language]["title"])
             print(language_pack[language]["modified_by"])
             print(language_pack[language]["backup_warning"] + "\n")
-            if device.supported():
-                print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['supported']})\n")
+            if supported:
+                if partial:
+                    print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['partially_supported']})\n")
+                    print(f"{language_pack[language]['partially_supported_tip']}")
+                else:
+                    print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['supported']})\n")
             else:
                 print(f"{language_pack[language]['connected']} {device.name}\n{language_pack[language]['ios_version']} {device.version} Build {device.build} ({language_pack[language]['not_supported']})\n")
+
         elif choice == 0:
             print()
             print(language_pack[language]["goodbye"])
