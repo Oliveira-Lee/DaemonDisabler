@@ -486,12 +486,11 @@ class CheckService():
 
         if 'could not be found' in result.stderr or 'does not exist' in result.stderr:
             self.show_error(f"Check if '{service_name}' is installed.")
-        elif 'inactive' in result.stdout or 'stopped' in result.stderr:
-            self.start_service(service_name)
+        self.start_service(service_name)
 
     def start_service(self, service_name):
         init_system = self.get_init_system()
-        command = self.get_command(init_system, service_name, 'start')
+        command = self.get_command(init_system, service_name, 'restart')
 
         if command is None:
             return
