@@ -32,7 +32,6 @@ class App(QtWidgets.QWidget):
         self.language_pack = {
             "en": {
                 "title": "Daemon Disabler",
-                "title_ext_info": "Packaged distribution",
                 "about": "\nBased on thermalmonitordDisabler by rponeawa.\n\nthermalmonitordDisabler based on Nugget by leminlimez.",
                 "description": "A tool for disable iOS services. \nLeave all options unchecked and click apply to re-enable services.",
                 "backup_warning": "Please back up your device before using!",
@@ -75,7 +74,6 @@ class App(QtWidgets.QWidget):
             },
             "zh": {
                 "title": "守护程序禁用工具",
-                "title_ext_info": "打包分发版",
                 "about": "\n基于 rponeawa 的 thermalmonitordDisabler\n\nthermalmonitordDisabler 基于 leminlimez 的 Nugget",
                 "description": "用于禁用 iOS 上的守护程序\n保持所有选项为未勾选状态下应用更改\n即可撤销修改",
                 "backup_warning": "使用前请备份您的设备！",
@@ -118,8 +116,6 @@ class App(QtWidgets.QWidget):
             }
         }
 
-        if self.language == "zh" and self.frozen():
-                self.msgbox.information(self, "不受支持的版本", "请不要分发此文件\n软件作者无法对此版本提供技术支持")
         self.init_ui()
         self.get_device_info()
 
@@ -155,16 +151,6 @@ class App(QtWidgets.QWidget):
         if getattr(sys, 'frozen', False):
             return True
 
-    def title_ext_info(self):
-        if self.frozen ():
-            return "(" + self.language_pack[self.language]["title_ext_info"] + ")"
-        return ""
-
-    def closeEvent(self, event: QEvent):
-        if self.s_language == "zh" and self.frozen():
-            if self.msgbox.information(self, self.language_pack[self.language]["title"] + " " + self.get_version(), "如果软件有帮到您\n请给项目点颗星, 谢谢!", self.msgbox.Yes | self.msgbox.No, self.msgbox.Yes) == self.msgbox.Yes:
-                self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
-            event.accept()
 
     def set_font(self):
         if platform.system() == "Windows":
@@ -193,7 +179,7 @@ class App(QtWidgets.QWidget):
         self.about_icon = QSvgWidget(":/about.svg")
         self.about_icon.setFixedSize(24, 24)
         self.about_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.about_icon.mouseReleaseEvent = lambda event: self.msgbox.about(self, "About" + " " + self.language_pack[self.language]["title"] + " " + self.get_version() + " " + self.title_ext_info(), self.language_pack[self.language]["about"])
+        self.about_icon.mouseReleaseEvent = lambda event: self.msgbox.about(self, "About" + " " + self.language_pack[self.language]["title"] + " " + self.get_version(), self.language_pack[self.language]["about"])
         self.about_icon.setToolTip("About")
 
         self.github_icon = QSvgWidget(":/brand-github.svg")
@@ -435,7 +421,7 @@ class App(QtWidgets.QWidget):
 
     def switch_language(self):
         self.language = "zh" if self.language == "en" else "en"
-        self.setWindowTitle(self.language_pack[self.language]["title"] + self.title_ext_info())
+        self.setWindowTitle(self.language_pack[self.language]["title"])
 
         self.description_label.setText(self.language_pack[self.language]["description"])
 
