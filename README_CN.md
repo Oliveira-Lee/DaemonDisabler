@@ -1,6 +1,6 @@
 # 守护进程禁用工具
 
-用于禁用 iOS 系统中的一些守护进程。
+用于禁用 iOS 系统中的一些守护进程。可以从 [Release](https://github.com/ringoju1ce/DaemonDisabler/releases/latest) 下载最新版本
 
 **使用本软件的风险由您自行承担，使用前请备份设备**
 
@@ -75,7 +75,7 @@ com.apple.accessoryupdaterd
 
 ## 功能
 
-* 禁用温度监测 (App 将不会在发热时主动降低运行速度)
+* 禁用温度监测 (App 将不会在发热时主动降低运行速度;电池会显示为未知部件)
 * 禁用系统更新
 * 禁用配件固件更新 (Airpods等)
 * 禁用其他非必要且影响性能的服务 (UsageTrackingAgent 和 spotlightknowledged)
