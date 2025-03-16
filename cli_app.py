@@ -40,7 +40,7 @@ language_pack = {
             "[{check}] 2. Disable OTA",
             "[{check}] 3. Disable UsageTrackingAgent",
             "[{check}] 4. Disable spotlightknowledged",
-            "[{check}] 5. Disable MobileAccessoryUpdater",
+            "[{check}] 5. Disable accessoryupdaterd",
             "6. Apply changes",
             "7. 切换到简体中文",
             "0. Exit"
@@ -67,7 +67,7 @@ language_pack = {
             "[{check}] 2. 禁用系统更新",
             "[{check}] 3. 禁用 UsageTrackingAgent (使用状态追踪,禁用后将大幅缓解高负载状态下的卡顿情况)",
             "[{check}] 4. 禁用 spotlightknowledged",
-            "[{check}] 5. 禁用 MobileAccessoryUpdater",
+            "[{check}] 5. 禁用 accessoryupdaterd",
             "6. 应用更改",
             "7. Switch to English",
             "0. 退出"
@@ -132,7 +132,7 @@ def get_command(init_system, service_name, action):
         print(f"error: Unsupported init system: {init_system}")
         return None
 
-def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_spotlightknowledged=False, add_mobileaccessoryupdater=False):
+def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tracking_agent=False, add_spotlightknowledged=False, add_accessoryupdaterd=False):
     plist = default_disabled_plist.copy()
 
     if add_thermalmonitord:
@@ -159,17 +159,15 @@ def modify_disabled_plist(add_thermalmonitord=False, add_ota=False, add_usage_tr
     else:
         plist.pop("com.apple.spotlightknowledged", None)
 
-    if add_mobileaccessoryupdater:
-        plist["com.apple.accessoryupdater"] = True
-        plist["com.apple.MobileAccessoryUpdater"] = True
+    if add_accessoryupdaterd:
+        plist["com.apple.accessoryupdaterd"] = True
     else:
-        plist.pop("com.apple.accessoryupdater", None)
-        plist.pop("com.apple.MobileAccessoryUpdater", None)
+        plist.pop("com.apple.accessoryupdaterd", None)
 
     plist_data = {'plist': {'dict': plist}}
     return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
 
-def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_spotlightknowledged, disable_mobileaccessoryupdater):
+def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_spotlightknowledged, disable_accessoryupdaterd):
     menu = language_pack[language]["menu_options"]
     for i, option in enumerate(menu):
         if i == 0:
@@ -181,7 +179,7 @@ def print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disab
         elif i == 3:
             check = "✓" if disable_spotlightknowledged else "×"
         elif i == 4:
-            check = "✓" if disable_mobileaccessoryupdater else "×"
+            check = "✓" if disable_accessoryupdaterd else "×"
         else:
             check = ""
         print(option.format(check=check))
@@ -223,10 +221,10 @@ while running:
     disable_ota = False
     disable_usage_tracking_agent = False
     disable_spotlightknowledged = False
-    disable_mobileaccessoryupdater = False
+    disable_accessoryupdaterd = False
 
     while True:
-        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_spotlightknowledged, disable_mobileaccessoryupdater)
+        print_menu(thermalmonitord, disable_ota, disable_usage_tracking_agent, disable_spotlightknowledged, disable_accessoryupdaterd)
         try:
             choice = int(input(language_pack[language]["input_prompt"]))
         except ValueError:
@@ -241,7 +239,7 @@ while running:
         elif choice == 4:
             disable_spotlightknowledged = not disable_spotlightknowledged
         elif choice == 5:
-            disable_mobileaccessoryupdater = not disable_mobileaccessoryupdater
+            disable_accessoryupdaterd = not disable_accessoryupdaterd
         elif choice == 6:
             try:
                 files_to_restore = []
@@ -251,7 +249,7 @@ while running:
                     add_ota=disable_ota,
                     add_usage_tracking_agent=disable_usage_tracking_agent,
                     add_spotlightknowledged=disable_spotlightknowledged,
-                    add_mobileaccessoryupdater=disable_mobileaccessoryupdater
+                    add_accessoryupdaterd=disable_accessoryupdaterd
                 )
 
                 files_to_restore.append(FileToRestore(

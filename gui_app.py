@@ -27,7 +27,7 @@ class App(QtWidgets.QWidget):
         self.disable_ota = False
         self.disable_usage_tracking_agent = False
         self.disable_spotlightknowledged = False
-        self.disable_mobileaccessoryupdater = False
+        self.disable_accessoryupdaterd = False
 
         self.language_pack = {
             "en": {
@@ -62,7 +62,7 @@ class App(QtWidgets.QWidget):
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
                     "Disable spotlightknowledged",
-                    "Disable mobileaccessoryupdater"
+                    "Disable accessoryupdaterd"
                 ],
                 "menu_options_tips": [
                     "Lock thermal state at Normal\nApp won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
@@ -104,7 +104,7 @@ class App(QtWidgets.QWidget):
                     "禁用系统更新",
                     "禁用 UsageTrackingAgent",
                     "禁用 spotlightknowledged",
-                    "禁用 mobileaccessoryupdater"
+                    "禁用 accessoryupdaterd"
                 ],
                 "menu_options_tips": [
                     "锁定热状态为Normal\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
@@ -236,9 +236,9 @@ class App(QtWidgets.QWidget):
         self.disable_spotlightknowledged_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
         self.layout.addWidget(self.disable_spotlightknowledged_checkbox)
 
-        self.disable_mobileaccessoryupdater_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][4])
-        self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
-        self.layout.addWidget(self.disable_mobileaccessoryupdater_checkbox)
+        self.disable_accessoryupdaterd_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][4])
+        self.disable_accessoryupdaterd_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
+        self.layout.addWidget(self.disable_accessoryupdaterd_checkbox)
 
         self.apply_button = QtWidgets.QPushButton(self.language_pack[self.language]["apply_changes"])
         self.apply_button.clicked.connect(self.apply_changes)
@@ -310,7 +310,7 @@ class App(QtWidgets.QWidget):
         self.disable_ota_checkbox.setEnabled(not disable)
         self.disable_usage_tracking_checkbox.setEnabled(not disable)
         self.disable_spotlightknowledged_checkbox.setEnabled(not disable)
-        self.disable_mobileaccessoryupdater_checkbox.setEnabled(not disable)
+        self.disable_accessoryupdaterd_checkbox.setEnabled(not disable)
         self.apply_button.setEnabled(not disable)
 
     def update_device_info(self):
@@ -365,13 +365,9 @@ class App(QtWidgets.QWidget):
         else:
             plist.pop("com.apple.spotlightknowledged", None)
 
-        if self.disable_mobileaccessoryupdater_checkbox.isChecked():
-            plist["com.apple.mobileaccessoryupdater"] = True
-            plist["com.apple.UARPUpdaterServiceLegacyAudio"] = True
+        if self.disable_accessoryupdaterd_checkbox.isChecked():
             plist["com.apple.accessoryupdaterd"] = True
         else:
-            plist.pop("com.apple.mobileaccessoryupdater", None)
-            plist.pop("com.apple.UARPUpdaterServiceLegacyAudio", None)
             plist.pop("com.apple.accessoryupdaterd", None)
 
         return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
@@ -439,8 +435,8 @@ class App(QtWidgets.QWidget):
         self.disable_usage_tracking_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][2])
         self.disable_spotlightknowledged_checkbox.setText(self.language_pack[self.language]["menu_options"][3])
         self.disable_spotlightknowledged_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
-        self.disable_mobileaccessoryupdater_checkbox.setText(self.language_pack[self.language]["menu_options"][4])
-        self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
+        self.disable_accessoryupdaterd_checkbox.setText(self.language_pack[self.language]["menu_options"][4])
+        self.disable_accessoryupdaterd_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
 
         self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
         self.refresh_button.setText(self.language_pack[self.language]["refresh"])
