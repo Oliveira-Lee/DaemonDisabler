@@ -27,12 +27,11 @@ class App(QtWidgets.QWidget):
         self.disable_ota = False
         self.disable_usage_tracking_agent = False
         self.disable_spotlightknowledged = False
-        self.disable_mobileaccessoryupdater = False
+        self.disable_accessoryupdaterd = False
 
         self.language_pack = {
             "en": {
                 "title": "Daemon Disabler",
-                "title_ext_info": "Packaged distribution",
                 "about": "\nBased on thermalmonitordDisabler by rponeawa.\n\nthermalmonitordDisabler based on Nugget by leminlimez.",
                 "description": "A tool for disable iOS services. \nLeave all options unchecked and click apply to re-enable services.",
                 "backup_warning": "Please back up your device before using!",
@@ -63,7 +62,7 @@ class App(QtWidgets.QWidget):
                     "Disable OTA",
                     "Disable UsageTrackingAgent",
                     "Disable spotlightknowledged",
-                    "Disable mobileaccessoryupdater"
+                    "Disable accessoryupdaterd"
                 ],
                 "menu_options_tips": [
                     "Lock thermal state at Normal\nApp won't actively throttle performance but cannot prevent chip-level thermal throttling\nAfter disabling, the battery will show as an unknown parts",
@@ -75,7 +74,6 @@ class App(QtWidgets.QWidget):
             },
             "zh": {
                 "title": "守护程序禁用工具",
-                "title_ext_info": "打包分发版",
                 "about": "\n基于 rponeawa 的 thermalmonitordDisabler\n\nthermalmonitordDisabler 基于 leminlimez 的 Nugget",
                 "description": "用于禁用 iOS 上的守护程序\n保持所有选项为未勾选状态下应用更改\n即可撤销修改",
                 "backup_warning": "使用前请备份您的设备！",
@@ -106,7 +104,7 @@ class App(QtWidgets.QWidget):
                     "禁用系统更新",
                     "禁用 UsageTrackingAgent",
                     "禁用 spotlightknowledged",
-                    "禁用 mobileaccessoryupdater"
+                    "禁用 accessoryupdaterd"
                 ],
                 "menu_options_tips": [
                     "锁定热状态为Normal\nApp将不会根据热状态主动降低处理速度\n*禁用此服务无法阻止芯片层面的过热降频\n*禁用后电池会显示未知部件",
@@ -118,8 +116,6 @@ class App(QtWidgets.QWidget):
             }
         }
 
-        if self.language == "zh" and self.frozen():
-                self.msgbox.information(self, "不受支持的版本", "请不要分发此文件\n软件作者无法对此版本提供技术支持")
         self.init_ui()
         self.get_device_info()
 
@@ -155,16 +151,6 @@ class App(QtWidgets.QWidget):
         if getattr(sys, 'frozen', False):
             return True
 
-    def title_ext_info(self):
-        if self.frozen ():
-            return "(" + self.language_pack[self.language]["title_ext_info"] + ")"
-        return ""
-
-    def closeEvent(self, event: QEvent):
-        if self.s_language == "zh" and self.frozen():
-            if self.msgbox.information(self, self.language_pack[self.language]["title"] + " " + self.get_version(), "如果软件有帮到您\n请给项目点颗星, 谢谢!", self.msgbox.Yes | self.msgbox.No, self.msgbox.Yes) == self.msgbox.Yes:
-                self.open_link("https://github.com/ringoju1ce/DaemonDisabler")
-            event.accept()
 
     def set_font(self):
         if platform.system() == "Windows":
@@ -193,7 +179,7 @@ class App(QtWidgets.QWidget):
         self.about_icon = QSvgWidget(":/about.svg")
         self.about_icon.setFixedSize(24, 24)
         self.about_icon.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.about_icon.mouseReleaseEvent = lambda event: self.msgbox.about(self, "About" + " " + self.language_pack[self.language]["title"] + " " + self.get_version() + " " + self.title_ext_info(), self.language_pack[self.language]["about"])
+        self.about_icon.mouseReleaseEvent = lambda event: self.msgbox.about(self, "About" + " " + self.language_pack[self.language]["title"] + " " + self.get_version(), self.language_pack[self.language]["about"])
         self.about_icon.setToolTip("About")
 
         self.github_icon = QSvgWidget(":/brand-github.svg")
@@ -250,9 +236,9 @@ class App(QtWidgets.QWidget):
         self.disable_spotlightknowledged_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
         self.layout.addWidget(self.disable_spotlightknowledged_checkbox)
 
-        self.disable_mobileaccessoryupdater_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][4])
-        self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
-        self.layout.addWidget(self.disable_mobileaccessoryupdater_checkbox)
+        self.disable_accessoryupdaterd_checkbox = QtWidgets.QCheckBox(self.language_pack[self.language]["menu_options"][4])
+        self.disable_accessoryupdaterd_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
+        self.layout.addWidget(self.disable_accessoryupdaterd_checkbox)
 
         self.apply_button = QtWidgets.QPushButton(self.language_pack[self.language]["apply_changes"])
         self.apply_button.clicked.connect(self.apply_changes)
@@ -324,7 +310,7 @@ class App(QtWidgets.QWidget):
         self.disable_ota_checkbox.setEnabled(not disable)
         self.disable_usage_tracking_checkbox.setEnabled(not disable)
         self.disable_spotlightknowledged_checkbox.setEnabled(not disable)
-        self.disable_mobileaccessoryupdater_checkbox.setEnabled(not disable)
+        self.disable_accessoryupdaterd_checkbox.setEnabled(not disable)
         self.apply_button.setEnabled(not disable)
 
     def update_device_info(self):
@@ -379,13 +365,9 @@ class App(QtWidgets.QWidget):
         else:
             plist.pop("com.apple.spotlightknowledged", None)
 
-        if self.disable_mobileaccessoryupdater_checkbox.isChecked():
-            plist["com.apple.mobileaccessoryupdater"] = True
-            plist["com.apple.UARPUpdaterServiceLegacyAudio"] = True
+        if self.disable_accessoryupdaterd_checkbox.isChecked():
             plist["com.apple.accessoryupdaterd"] = True
         else:
-            plist.pop("com.apple.mobileaccessoryupdater", None)
-            plist.pop("com.apple.UARPUpdaterServiceLegacyAudio", None)
             plist.pop("com.apple.accessoryupdaterd", None)
 
         return plistlib.dumps(plist, fmt=plistlib.FMT_XML)
@@ -435,7 +417,7 @@ class App(QtWidgets.QWidget):
 
     def switch_language(self):
         self.language = "zh" if self.language == "en" else "en"
-        self.setWindowTitle(self.language_pack[self.language]["title"] + self.title_ext_info())
+        self.setWindowTitle(self.language_pack[self.language]["title"])
 
         self.description_label.setText(self.language_pack[self.language]["description"])
 
@@ -453,8 +435,8 @@ class App(QtWidgets.QWidget):
         self.disable_usage_tracking_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][2])
         self.disable_spotlightknowledged_checkbox.setText(self.language_pack[self.language]["menu_options"][3])
         self.disable_spotlightknowledged_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][3])
-        self.disable_mobileaccessoryupdater_checkbox.setText(self.language_pack[self.language]["menu_options"][4])
-        self.disable_mobileaccessoryupdater_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
+        self.disable_accessoryupdaterd_checkbox.setText(self.language_pack[self.language]["menu_options"][4])
+        self.disable_accessoryupdaterd_checkbox.setToolTip(self.language_pack[self.language]["menu_options_tips"][4])
 
         self.apply_button.setText(self.language_pack[self.language]["apply_changes"])
         self.refresh_button.setText(self.language_pack[self.language]["refresh"])
